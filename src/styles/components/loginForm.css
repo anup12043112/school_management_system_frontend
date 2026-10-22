@@ -1,0 +1,121 @@
+/* loginForm.css  */
+
+
+*{
+    padding: 0;
+    margin: 0;
+}
+
+body{
+    font-size: 10px;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+.fb-loginForm{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.headerIconStyle{
+    width: 4rem;
+    height: 4rem;
+    min-width: .9rem;
+    min-height: 0.9rem;
+    padding: .5rem;
+    color: blue;
+}
+.formBody{
+    width: 60%;
+    max-width: 95%;
+    max-width: 80vh;
+    padding: 1rem;
+    flex-direction: column;
+    animation: formIn 0.3s ease forwards;
+    background-color: aliceblue;
+    border-radius: .8rem;
+    box-shadow: 0 0 .2rem rgb(0, 28, 52);
+}
+.form{
+    width: 100%;
+    flex-direction: column;
+}
+
+.closeBTNBox{
+    width: 95%;
+    justify-content: right;
+}
+.closeIconStyle{
+    width: 1.2rem;
+    height: 1.2rem;
+}
+.closeBTN{
+    border-radius: 50%;
+    padding: 0.3rem;
+    border: none;
+    outline: none;
+    box-shadow: 0 0.1rem 0.1rem rgb(0, 0, 0);
+    transition: all 0.3s ease;
+}
+.closeBTN:hover{
+    cursor: pointer;
+    box-shadow: inset 0 0.1rem 0.1rem rgb(0, 0, 0);
+}
+.closeBTN:active{
+    transform: scale(0.8);
+}
+
+
+.loginHeader{
+    width: 90%;
+    height: fit-content;
+    flex-direction: column;
+}
+.loginHeadLabel{
+    font-size: 1.8rem;
+    font-weight: 660;
+    margin: .6rem 0;
+    margin-bottom: 2rem;
+}
+.inputIconStyle{
+    width: 1.6rem;
+    height: 1.6rem;
+    color: red;
+    margin: 0 .7rem;
+}
+.inputField{
+    width: 90%;
+    margin: .4rem 0;
+}
+.input{
+    width: 70%;
+    height: 1.9rem;
+    padding: .3rem 1rem;
+    outline: none;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: .3rem;
+}
+
+.loginIcon{
+    width: 1.3rem;
+    height: 1.3rem;
+    padding: .2rem;
+    margin: 0 .3rem;
+}
+.loginBTN{
+    width: 12rem;
+    height: fit-content;
+    font-size: 1rem;
+    border-radius: .3rem;
+    padding: .2rem;
+    margin: 1.5rem 0;
+    border: 1px solid rgba(0, 0, 0, 0.275);
+    background-color: rgb(255, 240, 221);
+    outline: none;
+    transition: all 0.3s ease;
+}
+.loginBTN:hover{
+    cursor: pointer;
+    background-color: rgb(255, 210, 152);
+}
+.loginBTN:active{
+    transform: scale(0.8)
+}

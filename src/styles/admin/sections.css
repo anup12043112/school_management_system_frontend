@@ -1,0 +1,270 @@
+* {
+    padding: 0;
+    margin: 0;
+}
+
+body {
+    font-size: 10px;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+.sections_admin {
+    width: 80%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    background-color: #E8E9EE;
+}
+
+.sections_admin * {
+    display: flex;
+}
+
+.sections_admin .nav {
+    width: 95%;
+    height: 8%;
+    align-items: center;
+    justify-content: right;
+    column-gap: 1.2rem;
+}
+
+.sections_admin .nav .addSectionBTN {
+    align-items: center;
+    height: fit-content;
+    border-radius: 6rem;
+    column-gap: .3rem;
+    padding-right: 2rem;
+    color: blueviolet;
+    border: 1px solid;
+    transition: all 0.3s ease;
+}
+
+.sections_admin .nav .addSectionBTN:hover {
+    cursor: pointer;
+    transform: scale(0.9);
+}
+
+.sections_admin .nav .addSectionBTN:active {
+    transform: scale(0.8);
+}
+
+.addSectionBTN .icon {
+    background-color: blueviolet;
+    color: aliceblue;
+    width: 1rem;
+    height: 1rem;
+    border-radius: 50%;
+    padding: .4rem;
+}
+
+
+.section_attend_Intro {
+    width: 95%;
+    height: 10%;
+    flex-direction: column;
+}
+
+.section_attend__greet {
+    font-size: 1.5rem;
+    font-weight: 550;
+}
+
+.sections_admin .subject_section_container {
+    width: 95%;
+    height: 80%;
+    justify-content: space-between;
+    align-items: center;
+}
+
+@scope (.sections_admin .subject_section_container) {
+    .leftBox {
+        width: 65%;
+        height: 100%;
+        flex-direction: column;
+        align-items: center;
+        border-radius: .7rem;
+        box-shadow: -.2rem -.2rem .1rem aliceblue, .2rem .2rem .1rem rgba(0, 0, 0, 0.332);
+    }
+
+    .nav_box {
+        width: 95%;
+        height: 10%;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .title {
+        font-size: 1.2rem;
+        font-weight: 550;
+    }
+
+    .searchBar {
+        width: 60%;
+        padding: .5rem .6rem;
+        border: none;
+        outline: none;
+        border-radius: .35rem;
+        box-shadow: 0 0 .1rem rgba(0, 0, 0, 0.408);
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .subjectBox {
+        width: 95%;
+        height: 85%;
+        padding-top: 2.5%;
+        margin-bottom: 2.5%;
+        justify-content: space-between;
+        align-items: flex-start;
+        align-content: flex-start;
+        row-gap: 1.5rem;
+        flex-wrap: wrap;
+        overflow-x: hidden;
+        overflow-y: auto;
+    }
+
+    .subject {
+        width: 46%;
+        padding: .3rem 0;
+        height: auto;
+        border: 1px solid rgba(0, 0, 0, 0.368);
+        justify-content: center;
+        align-items: center;
+        border-radius: .4rem;
+        background-color: #fff;
+    }
+
+    .infoBox_subject {
+        width: 65%;
+        align-items: start;
+        justify-content: center;
+        row-gap: .4rem;
+        flex-direction: column;
+    }
+
+    .subName, .secName {
+        font-size: 1.1rem;
+        font-weight: 550;
+        color: rgb(42, 42, 42);
+    }
+
+    .subCode {
+        font-size: 0.8rem;
+        column-gap: 0.2rem;
+        color: rgb(42, 42, 42);
+    }
+
+    .btnBox_subject {
+        width: 25%;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        row-gap: .4rem;
+    }
+
+    .actionBTN {
+        background-color: transparent;
+        border: none;
+        outline: none;
+    }
+
+    .actionBTNIcon {
+        width: 1.15rem;
+        height: 1.15rem;
+        transition: all 0.3s ease;
+    }
+
+    .actionBTNIcon:hover {
+        cursor: pointer;
+        color: rgb(159, 56, 255);
+    }
+
+    .actionBTNIcon:active {
+        transform: scale(0.7);
+    }
+
+
+
+    .rightBox {
+        width: 33%;
+        height: 100%;
+        flex-direction: column;
+        align-items: center;
+        box-shadow: -.2rem -.2rem .1rem aliceblue, .2rem .2rem .1rem rgba(0, 0, 0, 0.332);
+        border-radius: .5rem;
+    }
+
+    .sectionBox {
+        width: 95%;
+        height: 85%;
+        padding-top: 2.5%;
+        margin-bottom: 2.5%;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        align-items: flex-start;
+        align-content: flex-start;
+        background-color: #E8E9EE;
+        overflow-x: hidden;
+        overflow-y: auto;
+        row-gap: 1rem;
+    }
+
+    .section {
+        width: 45%;
+        padding: .3rem 0;
+        height: auto;
+        border: 1px solid rgba(0, 0, 0, 0.368);
+        justify-content: center;
+        align-items: center;
+        border-radius: .4rem;
+        background-color: #fff;
+    }
+    
+    .infoBox_section {
+        width: 95%;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .btnBox_section {
+        width: 95%;
+        align-items: center;
+        justify-content: center;
+        column-gap: .7rem;
+    }
+
+    .loaderBox {
+        width: 95%;
+        height: 90%;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+    }
+
+    .loadingCircle {
+        width: 4rem;
+        height: 4rem;
+        border-radius: 50%;
+        border-top: 1px solid red;
+        border-bottom: 1px solid blue;
+        border-left: 1px solid rgba(0, 0, 255, 0);
+        border-right: 1px solid rgba(0, 0, 255, 0);
+        animation: rotateBar 1s linear infinite;
+    }
+
+    @keyframes rotateBar {
+        0% {
+            transform: rotate(0deg);
+        }
+
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+
+    .loadingText {
+        font-size: 0.8rem;
+        margin: .6rem 0;
+        color: rgb(55, 55, 55);
+    }
+}

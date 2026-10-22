@@ -1,0 +1,238 @@
+.attendance_admin {
+    width: 80%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    background-color: #E8E9EE;
+}
+
+.attendance_admin * {
+    display: flex;
+}
+
+.attendance_admin .nav {
+    width: 95%;
+    height: 8%;
+    align-items: center;
+    justify-content: right;
+}
+
+
+.attendanceIntro {
+    width: 95%;
+    height: 10%;
+    flex-direction: column;
+}
+
+.attendance_greet {
+    font-size: 1.5rem;
+    font-weight: 550;
+}
+
+.attendance_admin .filterButtons {
+    width: 95%;
+    height: 10%;
+    align-items: center;
+    justify-content: space-between;
+}
+@scope(.attendance_admin .filterButtons){
+    .sortBy{
+        width: 75%;
+        height: 100%;
+        align-items: center;
+    }
+    .sortBy select{
+        padding: .3rem .7rem;
+        border-radius: .3rem;
+        box-shadow: .1rem .1rem .1rem rgba(0, 0, 0, 0.286);
+        border: none;
+        outline: none;
+        cursor: pointer;
+    }
+    .sortOptions{
+        font-size: 0.85;
+        background-color: rgb(233, 242, 255);
+        color: rgb(119, 0, 255);
+        font-weight: 500;
+    }
+    
+    .filterBTNBox{
+        width: 25%;
+        height: 100%;
+        align-items: center;
+        justify-content: right;
+        column-gap: 1rem;
+    }
+    .filterBTNBox select{
+        padding: .3rem .8rem;
+        border-radius: .3rem;
+        box-shadow: .1rem .1rem .1rem rgba(0, 0, 0, 0.286);
+        border: none;
+        outline: none;
+        cursor: pointer;
+    }
+
+}
+
+
+
+.attendance_admin .attendanceBox {
+    width: 95%;
+    height: 70%;
+    flex-direction: column;
+    align-items: center;
+    border-radius: .4rem;
+    box-shadow: .2rem .2rem .2rem rgba(0, 0, 0, 0.203), -.2rem -.2rem .2rem rgb(255, 255, 255);
+}
+
+@scope(.attendance_admin .attendanceBox) {
+    .header {
+        width: 97%;
+        height: 10%;
+        align-items: center;
+        column-gap: 0.4rem;
+        color: rgb(0, 88, 160);
+    }
+
+    .header .icon {
+        width: 1.3rem;
+        height: 1.3rem;
+    }
+
+    .header p {
+        font-size: 1.1rem;
+        font-weight: 550;
+    }
+    .atten_box{
+        width: 95%;
+        height: 75%;
+        padding: 2.5% 1%;
+        flex-wrap: wrap;
+        overflow-y: auto;
+        justify-content: space-between;
+        align-content: flex-start;
+        align-items: center;
+        row-gap: 0.7rem;
+    }
+
+    .attendance{
+        width: 45%;
+        height: auto;
+        padding: .3rem 0;
+        align-items: center;
+        justify-content: space-evenly;
+        background-color: aliceblue;
+        border-radius: .7rem;
+        border: 1px solid rgba(0, 0, 0, 0.195);
+        box-shadow: .1rem .1rem .2rem rgba(0, 0, 0, 0.286);
+    }
+    .presentBox{
+        border-left: 3px solid blue;
+    }
+    .absentBox{
+        border-left: 3px solid rgb(255, 0, 0);
+    }
+    .icon_att{
+        width: 1.8rem;
+        height: 1.8rem;
+        flex-shrink: 0;
+        color: rgb(172, 83, 255);
+    }
+    .attendance span{
+        width: 35%;
+        flex-direction: column;
+        justify-content: center;
+        align-items: start;
+        row-gap: .5rem;
+    }
+    .name{
+        font-size: 1.1rem;
+        font-weight: 550;
+        color: rgb(0, 0, 124);
+    }
+    .section{
+        font-size: .85rem;
+        column-gap: .3rem;
+    }
+    .date{
+        width: 20%;
+        font-size: .9rem;
+        font-weight: 550;
+    }
+    .status{
+        padding: .2rem 1rem;
+        font-size: .9rem;
+    }
+    .present{
+        color: rgb(0, 113, 8);
+        background-color: rgba(180, 255, 183, 0.703);
+        border-radius: 1rem;
+    }
+    .absent{
+        color: rgb(226, 0, 0);
+        background-color: rgba(255, 198, 198, 0.664);
+        border-radius: 1rem;
+    }
+
+    .pageChangingButtons{
+        width: 95%;
+        height: 10%;
+        align-items: start;
+        justify-content: right;
+    }
+}
+
+
+
+
+.overlay_addSec {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.168);
+}
+
+.overlay_addSec_closing {
+    animation: addSecOut 0.3s ease forwards;
+}
+
+@keyframes addSecOut {
+    from {
+        opacity: 1;
+    }
+
+    to {
+        opacity: 0;
+    }
+}
+
+.addNewSubjectFormBody {
+    width: 35%;
+    height: fit-content;
+    padding: 2rem 0;
+    background-color: aliceblue;
+    flex-direction: column;
+    animation: addSecIn 0.3s ease forwards;
+    opacity: 0;
+    transform: scale(0.5);
+    border-radius: .4rem;
+}
+
+@keyframes addSecIn {
+    0% {
+        opacity: 0;
+        transform: scale(0.5);
+    }
+
+    50% {
+        opacity: 1;
+        transform: scale(1.1);
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}

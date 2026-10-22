@@ -1,0 +1,92 @@
+/* PAGE CHANGING BUTTONS  */
+.changePG {
+    justify-content: center;
+    align-items: center;
+    width: 1.7rem;
+    height: 1.7rem;
+    color: rgb(0, 87, 105);
+    font-weight: 550;
+    margin: 0 0.5rem;
+    border-radius: .4rem;
+    background-color: transparent;
+    border: none;
+    outline: none;
+    box-shadow: inset .1rem .1rem .1rem black, inset -.1rem -.1rem .1rem rgb(255, 255, 255);
+    transition: all 0.3s ease;
+}
+
+.changePG:hover {
+    cursor: pointer;
+    background-color: rgb(200, 229, 255);
+}
+
+.changePG:active {
+    transform: scale(0.8);
+}
+
+
+
+
+
+/* LOADING BAR  */
+.loaderBox {
+    width: 95%;
+    height: 85%;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.loadingCircle {
+    width: 4rem;
+    height: 4rem;
+    border-radius: 50%;
+    border-top: 1px solid red;
+    border-bottom: 1px solid blue;
+    border-left: 1px solid rgba(0, 0, 255, 0);
+    border-right: 1px solid rgba(0, 0, 255, 0);
+    animation: rotateBar 1s linear infinite;
+}
+
+@keyframes rotateBar {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.loadingText {
+    font-size: 0.8rem;
+    margin: .6rem 0;
+    color: rgb(55, 55, 55);
+}
+
+
+
+/* SEARCHBAR  */
+.searchBox {
+    width: 30%;
+    height: fit-content;
+    column-gap: .3rem;
+    background-color: rgb(255, 255, 255);
+    align-items: center;
+    border-radius: .4rem;
+    padding: 0 .3rem;
+
+}
+
+.searchIcon {
+    width: 1.2rem;
+    height: 1.2rem;
+    color: gray;
+}
+
+.search {
+    width: 90%;
+    padding: .45rem 0;
+    border: none;
+    outline: none;
+}

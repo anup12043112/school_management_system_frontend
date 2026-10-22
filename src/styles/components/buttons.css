@@ -1,0 +1,30 @@
+/* ADDING NEW RECORD BUTTON  */
+.addNewRecordBTN {
+    align-items: center;
+    height: fit-content;
+    border-radius: 6rem;
+    column-gap: .3rem;
+    padding-right: 2.5%;
+    color: blueviolet;
+    border: 1px solid;
+    transition: all 0.3s ease;
+}
+
+.addNewRecordBTN:hover {
+    cursor: pointer;
+    transform: scale(0.9);
+}
+
+.addNewRecordBTN:active {
+    transform: scale(0.8);
+}
+
+.addNewRecordBTN .icon {
+    background-color: blueviolet;
+    color: aliceblue;
+    width: 1rem;
+    height: 1rem;
+    flex-shrink: 0;
+    border-radius: 50%;
+    padding: .4rem;
+}

@@ -1,0 +1,28 @@
+*{
+    padding: 0;
+    margin: 0;
+}
+.loaderBox{
+    display: flex;
+    justify-content: center;
+    align-self: center;
+}
+
+.loader{
+    width: 5rem;
+    height: 5rem;
+    border-top: 5px solid rgb(0, 194, 194);
+    border-radius: 50%;
+    animation: loading 1s linear infinite;
+}
+@keyframes loading {
+    0%{
+        transform: rotate(0deg);
+    }
+    50%{
+        transform: rotate(180deg);
+    }
+    100%{
+        transform: rotate(360deg);
+    }
+}

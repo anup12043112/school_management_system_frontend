@@ -1,0 +1,354 @@
+* {
+    padding: 0;
+    margin: 0;
+}
+
+.notice_admin {
+    width: 80%;
+    height: 100%;
+    flex-direction: column;
+    display: flex;
+    align-items: center;
+    background-color: #E8E9EE;
+}
+
+.notice_admin * {
+    display: flex;
+}
+
+.notice_admin .nav {
+    width: 95%;
+    height: 8%;
+    align-items: center;
+    justify-content: right;
+}
+
+
+.noticeIntro {
+    width: 95%;
+    height: 10%;
+    flex-direction: column;
+}
+
+.notice_greet {
+    font-size: 1.5rem;
+    font-weight: 550;
+}
+
+.notice_admin .bottomBox {
+    width: 95%;
+    height: 80%;
+    align-items: center;
+    flex-direction: column;
+    background-color: rgba(240, 248, 255, 0);
+    border-radius: .6rem;
+    box-shadow: .2rem .2rem .2rem rgba(0, 0, 0, 0.237), -.2rem -.2rem .2rem aliceblue;
+    overflow: hidden;
+}
+
+@scope(.notice_admin .bottomBox) {
+    .header {
+        width: 97%;
+        height: 10%;
+        align-items: center;
+        column-gap: 0.4rem;
+        color: rgb(0, 88, 160);
+    }
+
+    .header .icon {
+        width: 1.3rem;
+        height: 1.3rem;
+    }
+
+    .header p {
+        font-size: 1.1rem;
+        font-weight: 550;
+    }
+
+    .body {
+        width: 100%;
+        height: 86%;
+        padding: 2% 0;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: flex-start;
+        align-content: flex-start;
+        overflow-y: auto;
+        overflow-x: hidden;
+        row-gap: 1rem;
+    }
+    .body::-webkit-scrollbar{
+        display: none;
+    }
+
+    .notice{
+        width: 45%;
+        flex-direction: column;
+        align-items: center;
+        padding: 1% 0;
+        margin: 0 2%;
+        background-color: aliceblue;
+        border-radius: .5rem;
+        border: 1px solid rgba(0, 0, 0, 0.189);
+    }
+    .head{
+        width: 95%;
+        height: fit-content;
+        padding: 1% 0;
+        justify-content: space-between;
+    }
+
+    .head p{
+        font-size: 1.2rem;
+        font-weight: 550;
+        color: rgb(0, 144, 144);
+    }
+    .head button{
+        border: none;
+        outline: none;
+        width: 1.2rem;
+        height: 1.2rem;
+        transition: all 0.3s ease;
+        background-color: transparent;
+    }
+    .head button:hover{
+        cursor: pointer;
+        color: blueviolet;
+        transform: scale(1.1);
+    }
+    .head button:active{
+        transform: scale(0.7);
+    }
+    
+    .noticeBody{
+        width: 95%;
+        position: relative;
+        padding: 1% 0;
+        flex-direction: column;
+        color: rgb(70, 70, 70);
+    }
+    .noticeBody div{
+        width: 95%;
+        justify-content: space-between;
+        margin-top: 5%;
+    }
+    .desc{
+        font-size: .85rem;
+        width: 100%;
+        justify-content: left;
+        margin-top: 1%;
+    }
+    .by{
+        font-size: .9rem;
+        column-gap: .3rem;
+        
+    }
+    .on{
+        font-size: .9rem;
+    }
+}
+
+
+
+
+.noticeForm_admin * {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.overlay_noticeForm_admin {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    position: fixed;
+    background-color: rgba(0, 0, 0, 0.263);
+    z-index: 100;
+    inset: 0;
+    animation: formIn 0.5s ease forwards;
+    opacity: 0;
+    transform: scale(0.5);
+}
+
+@keyframes formIn {
+    0% {
+        opacity: 0;
+        transform: scale(0.5);
+    }
+
+    50% {
+        opacity: 0.5;
+        transform: scale(1.2);
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.closing {
+    animation: formOut 0.4s ease forwards;
+}
+
+@keyframes formOut {
+    0% {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    100% {
+        opacity: 0;
+        transform: scale(0.5);
+    }
+}
+
+.noticeForm_admin {
+    width: 50%;
+    height: 60%;
+    flex-direction: column;
+    background-color: aliceblue;
+    border-radius: .4rem;
+    overflow: hidden;
+}
+
+.noticeForm_admin .nav {
+    width: 100%;
+    height: 12%;
+    background-color: rgb(207, 240, 255);
+    justify-content: space-between;
+}
+
+.noticeForm_admin .icon {
+    width: 1.6rem;
+    height: 1.6rem;
+    color: rgb(0, 47, 128);
+    margin: 0 .7rem;
+}
+
+.noticeForm_admin .noticeFormTitle {
+    font-size: 1.3rem;
+    font-weight: 550;
+    color: rgb(0, 0, 160);
+}
+
+.noticeForm_admin .closeForm {
+    width: fit-content;
+    height: fit-content;
+    background-color: transparent;
+    border-radius: 50%;
+    padding: .2rem;
+    margin: 0 1rem;
+    border: none;
+    box-shadow: 0 0 .15rem black;
+    transition: all 0.3s ease;
+}
+
+.noticeForm_admin .closeForm:hover {
+    cursor: pointer;
+    transform: scale(1.2);
+}
+
+.noticeForm_admin .closeForm:active {
+    transform: scale(0.9);
+}
+
+.noticeForm_admin .close {
+    width: 1.1rem;
+    height: 1.1rem;
+    background-color: transparent;
+}
+
+
+.noticeForm_admin .body {
+    width: 100%;
+    height: 88%;
+    flex-direction: column;
+}
+
+.noticeForm_admin .firstSet {
+    width: 95%;
+    height: 20%;
+}
+
+.noticeForm_admin .firstInputSet {
+    width: 50%;
+    height: 100%;
+    flex-direction: column;
+    align-items: start;
+    row-gap: .5rem;
+}
+
+.noticeForm_admin .inputLabel {
+    font-size: 0.9rem;
+    font-weight: 550;
+}
+
+.noticeForm_admin .input1 {
+    width: 80%;
+    height: fit-content;
+    padding: .7rem .7rem;
+    border: none;
+    outline: none;
+    box-shadow: 0 0 .1rem rgba(0, 0, 0, 0.359);
+    border-radius: .2rem;
+    font-size: .9rem;
+    color: rgb(56, 56, 56);
+}
+
+
+.noticeForm_admin .secondSet {
+    width: 95%;
+    height: 60%;
+}
+
+.noticeForm_admin .secondInputSet {
+    width: 100%;
+    height: 90%;
+    flex-direction: column;
+    align-items: start;
+    justify-content: left;
+    row-gap: .5rem;
+}
+
+.noticeForm_admin .input2 {
+    width: 90%;
+    height: 80%;
+    padding: .7rem .7rem;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    border: none;
+    outline: none;
+    box-shadow: 0 0 .1rem rgba(0, 0, 0, 0.359);
+    border-radius: .2rem;
+    font-size: .9rem;
+    color: rgb(56, 56, 56);
+}
+
+.noticeForm_admin .buttonSpan {
+    width: 90%;
+    justify-content: right;
+}
+
+.noticeForm_admin .createBTN {
+    width: fit-content;
+    height: fit-content;
+    padding: .3rem 2.5rem;
+    background-color: rgb(0, 168, 194);
+    color: aliceblue;
+    border-radius: 0.3rem;
+    font-size: .9rem;
+    margin: .7rem 0;
+    border: none;
+    transition: all 0.3s ease;
+}
+
+.noticeForm_admin .createBTN:hover {
+    cursor: pointer;
+    background-color: rgb(0, 119, 137);
+}
+
+.noticeForm_admin .createBTN:active {
+    transform: scale(0.9);
+}
