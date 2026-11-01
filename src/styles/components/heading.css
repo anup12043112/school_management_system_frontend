@@ -1,0 +1,77 @@
+.headerMd, .headerLg {
+    height: 100%;
+    align-items: center;
+    column-gap: .5rem;
+}
+
+.headerMd .icon {
+    width: 1.3rem;
+    height: 1.3rem;
+    color: rgb(0, 88, 160);
+    flex-shrink: 0;
+}
+.headerLg .icon {
+    width: 1.5rem;
+    height: 1.5rem;
+    color: rgb(0, 88, 160);
+    flex-shrink: 0;
+}
+
+.headerMd p {
+    font-size: 1rem;
+    font-weight: 550;
+    color: rgb(0, 88, 160);
+}
+.headerLg p {
+    font-size: 1.2rem;
+    font-weight: 550;
+    color: rgb(0, 88, 160);
+}
+
+
+
+
+
+/* OVERLAY BOX HEADER  */
+.header {
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    display: flex;
+}
+
+.header * {
+    display: flex;
+}
+
+.header .leftDiv {
+    width: 70%;
+    height: 100%;
+    align-items: center;
+    justify-content: left;
+}
+
+.header .rightDiv {
+    width: 30%;
+    height: 100%;
+    align-items: center;
+    justify-content: right;
+}
+
+.righDiv .closeBTN {
+    background-color: transparent;
+    border: none;
+    outline: none;
+    padding: 0;
+    box-shadow: none;
+}
+
+.righDiv .closeBTN .closeIconStyle {
+    width: 1.2rem;
+    height: 1.2rem;
+    padding: .2rem;
+    color: rgb(0, 38, 163);
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.248);
+    box-shadow: 0 0 .2rem black;
+}

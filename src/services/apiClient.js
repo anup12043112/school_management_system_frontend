@@ -1,10 +1,8 @@
-// apiClient.js 
-
 import { refreshToken, removeTokens } from "./utils"
 
 const BASE_URL = import.meta.env.VITE_BASE_URL
-export async function request({ url, method, body }) {
 
+export async function request({ url, method, body }) {
     let headers = {
         "Content-type": "application/json",
     }
@@ -17,63 +15,51 @@ export async function request({ url, method, body }) {
             "authorization": `Bearer ${access_token}`
         }
     }
+
     try {
-        let req
-        if (body) {
-            req = await fetch(`${BASE_URL}${url}`, {
-                method,
-                headers,
-                body: JSON.stringify(body)
-            })
-        } else {
-            req = await fetch(`${BASE_URL}${url}`, {
-                method,
-                headers
-            })
-        }
-        let res = await req.json()
+        let req = await fetch(`${BASE_URL}${url}`, {
+            method,
+            headers,
+            ...(body && { body: JSON.stringify(body) })
+        })
+
         if (req.status === 401) {
-            console.log("Invalid token")
             const r = await refreshToken()
+
             if (!r.status) {
                 removeTokens()
-                return ({
+                return {
                     status: false,
                     data: {
                         message: "Login expired, Please Log in again !"
                     }
-                })
+                }
             }
-            if (body) {
-                req = await fetch(`${BASE_URL}${url}`, {
-                    method,
-                    headers: {
-                        "Content-type": "application/json",
-                        "authorization": `Bearer ${localStorage.getItem("access_token")}`
-                    },
-                    body: JSON.stringify(body)
-                })
-            } else {
-                req = await fetch(`${BASE_URL}${url}`, {
-                    method,
-                    headers: {
-                        "Content-type": "application/json",
-                        "authorization": `Bearer ${localStorage.getItem("access_token")}`
-                    }
-                })
-            }
-            res = await req.json()
-            return ({
-                status: true,
-                data: res
+
+            req = await fetch(`${BASE_URL}${url}`, {
+                method,
+                headers: {
+                    "Content-type": "application/json",
+                    "authorization": `Bearer ${localStorage.getItem("access_token")}`
+                },
+                ...(body && { body: JSON.stringify(body) })
             })
         }
+
+        const res = req.status === 204 ? null : await req.json()
+
         return {
-            status: true,
+            status: req.ok,
             data: res
         }
 
     } catch (error) {
         console.log("error: ", error)
+        return {
+            status: false,
+            data: {
+                message: error.message
+            }
+        }
     }
 }

@@ -30,6 +30,7 @@
     font-weight: 550;
 }
 
+
 .attendance_admin .filterButtons {
     width: 95%;
     height: 10%;
@@ -91,19 +92,8 @@
         width: 97%;
         height: 10%;
         align-items: center;
-        column-gap: 0.4rem;
-        color: rgb(0, 88, 160);
     }
 
-    .header .icon {
-        width: 1.3rem;
-        height: 1.3rem;
-    }
-
-    .header p {
-        font-size: 1.1rem;
-        font-weight: 550;
-    }
     .atten_box{
         width: 95%;
         height: 75%;
@@ -117,7 +107,7 @@
     }
 
     .attendance{
-        width: 45%;
+        width: 48%;
         height: auto;
         padding: .3rem 0;
         align-items: center;
@@ -139,8 +129,8 @@
         flex-shrink: 0;
         color: rgb(172, 83, 255);
     }
-    .attendance span{
-        width: 35%;
+    .attendance .att_span{
+        width: 30%;
         flex-direction: column;
         justify-content: center;
         align-items: start;
@@ -174,6 +164,12 @@
         background-color: rgba(255, 198, 198, 0.664);
         border-radius: 1rem;
     }
+    .attendance .act_span{
+        flex-direction: column;
+        justify-content: center;
+        align-items: start;
+        row-gap: .45rem;
+    }
 
     .pageChangingButtons{
         width: 95%;
@@ -185,54 +181,24 @@
 
 
 
-
-.overlay_addSec {
-    width: 100%;
-    height: 100%;
-    position: fixed;
-    inset: 0;
-    background-color: rgba(0, 0, 0, 0.168);
-}
-
-.overlay_addSec_closing {
-    animation: addSecOut 0.3s ease forwards;
-}
-
-@keyframes addSecOut {
-    from {
-        opacity: 1;
-    }
-
-    to {
-        opacity: 0;
-    }
-}
-
-.addNewSubjectFormBody {
-    width: 35%;
-    height: fit-content;
-    padding: 2rem 0;
-    background-color: aliceblue;
+.newRecordAtt{
+    display: flex;
+    align-items: center;
     flex-direction: column;
-    animation: addSecIn 0.3s ease forwards;
-    opacity: 0;
-    transform: scale(0.5);
+    width: 50%;
+    height: 45vh;
+    background-color: #ffffff;
     border-radius: .4rem;
+    box-shadow: .2rem .2rem .4rem rgba(0, 0, 0, 0.26);
 }
-
-@keyframes addSecIn {
-    0% {
-        opacity: 0;
-        transform: scale(0.5);
-    }
-
-    50% {
-        opacity: 1;
-        transform: scale(1.1);
-    }
-
-    100% {
-        opacity: 1;
-        transform: scale(1);
-    }
+.headAtt{
+    width: 95%;
+    height: 25%;
+}
+.bodyAtt{
+    width: 95%;
+    height: 72%;
+    padding: 1.5% 0;
+    flex-direction: column;
+    align-items: center;
 }

@@ -28,3 +28,89 @@
     border-radius: 50%;
     padding: .4rem;
 }
+
+
+
+/* PAGE CHANGING BUTTONS  */
+.changePG {
+    justify-content: center;
+    align-items: center;
+    width: 1.7rem;
+    height: 1.7rem;
+    color: rgb(0, 87, 105);
+    font-weight: 550;
+    margin: 0 0.5rem;
+    border-radius: .4rem;
+    background-color: transparent;
+    border: none;
+    outline: none;
+    box-shadow: inset .1rem .1rem .1rem black, inset -.1rem -.1rem .1rem rgb(255, 255, 255);
+    transition: all 0.3s ease;
+}
+
+.changePG:hover {
+    cursor: pointer;
+    background-color: rgb(200, 229, 255);
+}
+
+.changePG:active {
+    transform: scale(0.8);
+}
+
+
+
+/* ACTION BUTTON  */
+.actionBTN {
+    background-color: transparent;
+    border: none;
+    outline: none;
+}
+
+.actionBTNIcon {
+    width: 1.15rem;
+    height: 1.15rem;
+    color: rgb(74, 74, 74);
+    transition: all 0.3s ease;
+}
+
+.actionBTNIcon:hover {
+    cursor: pointer;
+    color: rgb(0, 0, 0);
+}
+
+.actionBTNIcon:active {
+    transform: scale(0.7);
+}
+
+
+
+
+
+/* FORM BUTTON  */
+.formBTN{
+    padding: 1% 7%;
+    column-gap: .3rem;
+    border: none;
+    outline: none;
+    color: aliceblue;
+    display: flex;
+    font-size: 0.9rem;
+    background-color: rgb(71, 154, 255);
+    border-radius: .5rem;
+    justify-self: right;
+    align-self: flex-end;
+    margin-top: 5%;
+    transition: all 0.3s ease;
+}
+.formBTN:hover{
+    cursor: pointer;
+    background-color: rgb(19, 124, 253);
+}
+.formBTN:active{
+    transform: scale(0.8);
+}
+.formBTN .icon{
+    width: 1rem;
+    height: 1rem;
+    flex-shrink: 0;
+}

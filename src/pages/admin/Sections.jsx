@@ -1,66 +1,101 @@
 import "../../styles/admin/sections.css"
-import { useState, useContext } from "react"
+import { useState, useEffect, useContext } from "react"
 import { request } from "../../services/apiClient"
+import { SquarePen, School, Trash, BookOpen } from "lucide-react"
 import { DataContext } from "../../context/DataContext"
-import { SquarePen, CopyPlusIcon, School, Trash, X, BookOpen } from "lucide-react"
 
-const Adding = ({ close, adding }) => {
-    const [data, setData] = useState(null)
-    const [data2, setData2] = useState(null)
+import { HeadingLg, OverlayHead } from "../../components/Headings"
+import { SearchBar } from "../../components/Loader"
+import { NewRecordButton, ActionButton, FormButton } from "../../components/Buttons"
+import Loader from "../../components/Loader"
+import { Input, Status } from "../../components/Loader"
 
-    async function createSec() {
-        const req = await request({ url: "/api/sections/", method: "POST", body: { name: sec } })
-        if (req.status) {
-            close()
-            alert("Created Sucessfully !")
+
+
+function AddNewRecord({ close, instance, status, isDone, setMsg, adding, reflectChange }) {
+    const [dataObj, setDataObj] = useState(instance || {})
+
+
+    async function performAction() {
+        if (dataObj.section || (dataObj.code && dataObj.subject)) {
+            let res
+            if (Object.keys(instance || {}).length === 0) {
+                // CREATING
+                res = await request({ url: adding === "section" ? "/api/sections/" : "/api/subjects/", method: "POST", body: dataObj })
+            } else {
+                // UPDATING
+                res = await request({ url: adding === "section" ? `/api/sections/${dataObj.id}/` : `/api/subjects/${dataObj.id}/`, method: "PATCH", body: dataObj })
+            }
+            status()
+            if (adding === "section") {   //CHECKING VALID SECTION CREATION
+                if (res.status && res.data.id) {
+                    isDone()
+                    setMsg(`Section [${res.data.section}] is created successfully.`)
+                    setDataObj({})
+                    reflectChange({ type: "section", url: "/api/sections/" })
+                } else {
+                    res.data.section[0] ? setMsg(res.data.section[0]) : setMsg("Unable to create the section")
+                }
+            } else {
+                //CREATING VALID SUBJECT CREATION
+                if (res.status && res.data.id) {
+                    isDone()
+                    setMsg(`Subject [${res.data.subject}] is created successfully.`)
+                    setDataObj({})
+                    reflectChange({ type: "subject", url: "/api/subjects/" })
+                } else {
+                    res.data.subject[0] ? setMsg(res.data.subject[0]) : setMsg("Unable to create the subject")
+                }
+            }
+
+        } else {
+            setMsg("Every field is required.")
         }
     }
 
+    function setValue(e) {
+        setDataObj(prev => (
+            { ...prev, [e.target.name]: e.target.value }
+        ))
+    }
     return (
-        <section className="adding_sub_sec">
-            <div className="header">
-                <span className="span">
-                    {
-                        adding == "section" ? (
-                            <>
-                                <School className="addNewSection_icon" />
-                                <p className="addNewSecLabel">Add New Section</p>
-                            </>
-                        ) : (
-                            <>
-                                <BookOpen className="addNewSection_icon" />
-                                <p className="addNewSecLabel">Add New Subject</p>
-                            </>
-                        )
-                    }
-                </span>
-                <span className="span">
-                    <button className="closeFormBTN_addNewSec fb_sec" onClick={close}>
-                        <X className="closeFormBTN_addNewSec_icon" />
-                    </button>
-                </span>
+        <main className="newRecordSecSub">
+            <div className="headSecSub">
+                <OverlayHead Icon={adding == "section" ? School : BookOpen} label={adding == "section" ? "Add Section" : "Add Subject"} onClick={close} />
             </div>
-            <form className="addNewSectionForm fb_sec">
-                <span className="span">
-                    <School className="icon" />
-                    <input
-                        type="text"
-                        className="newSectionInput"
-                        placeholder="Section e.g. 7B, 9C etc."
-                        onChange={e => setSec(e.target.value)}
-                    />
-                </span>
-                <button type="button" className="addSectionBTN fb_sec" onClick={() => createSec()}>
-                    <CopyPlusIcon className="addClassSectionIcon" />
-                    Add
-                </button>
+            <form className="bodySecSub">
+                {
+                    adding == "section" ? (
+                        <div className="inputSet">
+                            <Input name={"section"} onChange={e => setValue(e)} placeholder={"Enter Section e.g. 8A, 10C etc"} label={"Section"} value={dataObj.section ?? ""} />
+                        </div>
+                    ) : (
+                        <div className="inputSet">
+                            <Input name={"code"} onChange={e => setValue(e)} placeholder={"Enter Subject Code"} label={"Subject Code"} value={dataObj.code ?? ""} />
+                            <Input name={"subject"} onChange={e => setValue(e)} placeholder={"Enter Subject Name"} label={"Subject Name"} value={dataObj.subject ?? ""} />
+                        </div>
+                    )
+                }
+
+                <FormButton onClick={performAction} label={Object.keys(instance || {}).length === 0 ? `Create ${adding === "section" ? "Section" : "Subject"}` : "Update"} />
             </form>
-        </section>
+        </main>
     )
 }
 
 
-function AddSubject({ subList }) {
+function SubjectList({ subList, setInst, status, setMsg, isDone, reflectChange }) {
+    const deleteSub = async (id) => {
+        const res = await request({ url: `/api/subjects/${id}/`, method: "DELETE" })
+        status()
+        if (res.data === null) {
+            isDone()
+            setMsg("Subject is deleted successfully")
+            reflectChange({ type: "subject", url: "/api/subjects/" })
+        } else {
+            setMsg("Deletion unsuccessful.")
+        }
+    }
     return (
         subList ? (
             subList.map(sub => {
@@ -71,12 +106,8 @@ function AddSubject({ subList }) {
                             <p className="subCode"><strong>Subject Code:</strong> {sub.code}</p>
                         </div>
                         <div className="btnBox_subject">
-                            <button className="actionBTN">
-                                <SquarePen className="actionBTNIcon" />
-                            </button>
-                            <button className="actionBTN">
-                                <Trash className="actionBTNIcon" />
-                            </button>
+                            <ActionButton Icon={SquarePen} onClick={() => setInst(sub)} />
+                            <ActionButton Icon={Trash} onClick={() => deleteSub(sub.id)} />
                         </div>
                     </div>
                 )
@@ -89,25 +120,50 @@ function AddSubject({ subList }) {
 
 
 export default function Section() {
-    const { sections } = useContext(DataContext)
-    const { subjects } = useContext(DataContext)
+    const {sections, fetchSections} = useContext(DataContext)
+    const [subjects, setSubjects] = useState("")
 
     const [searchKeyword, setSearchKeyword] = useState("")
     const [searchResult, setSearchResult] = useState("")
 
-    const [adding, setAdding] = useState("")
-    const [deleting, setDeleting] = useState(null)
-    const [updating, setUpdating] = useState(null)
+    const [adding, setAdding] = useState("subject")
 
     const [showForm, setShowForm] = useState(false)
     const [isFormClosing, setIsFormClosing] = useState(false)
 
+    const [creationStatus, setCreationStatus] = useState(false)
+    const [isDone, setIsDone] = useState(false)
+    const [popMssg, setPopMsg] = useState("Something went wrong")
+
+    const [instance, setInstance] = useState({})
+
     function closeForm() {
+        setInstance({})
+        setAdding("subject")
         setIsFormClosing(true)
         setTimeout(() => {
             setShowForm(false)
             setIsFormClosing(false)
         }, 300)
+    }
+
+    function updateStatus() {
+        setCreationStatus(true)
+        setTimeout(() => {
+            setCreationStatus(false)
+            setIsDone(false)
+            setPopMsg("Something went wrong")
+        }, 2000)
+    }
+    function updateDoneStatus() {
+        setIsDone(true)
+    }
+    function setMsg(msg) {
+        setPopMsg(msg)
+    }
+    function setInstanceObj(e) {
+        setInstance(e)
+        setShowForm(true)
     }
 
     async function searchSubject(e) {
@@ -119,26 +175,51 @@ export default function Section() {
         }
     }
 
+    async function reflectChange({ type, url }) {
+        const res = await request({ url: url, method: "GET" })
+        if (res.status) {
+            type === "subject" ? setSubjects(res.data) : setSections(res.data)
+        }
+    }
+
+    const deleteSec = async (id) => {
+        const res = await request({ url: `/api/sections/${id}/`, method: "DELETE" })
+        updateStatus()
+        if (res.data === null) {
+            updateDoneStatus()
+            setMsg("Section is deleted successfully")
+            reflectChange({ type: "section", url: "/api/sections/" })
+        } else {
+            setMsg("Deletion unsuccessful.")
+        }
+    }
+
+    useEffect(() => {
+        if (!sections) fetchSections()
+        const getData = async () => {
+            const subject = await request({ url: "/api/subjects/", method: "GET" })
+
+            if (subject.status) {
+                setSubjects(subject.data)
+            }
+        }
+        getData()
+    }, [])
+
+    
     return (
         <>
             <main className="sections_admin fb_sec">
                 <section className="nav animation_left">
-                    <button className="addSectionBTN" onClick={() => {
+                    <NewRecordButton Icon={BookOpen} label={"Add a Subject"} onClick={() => {
                         setShowForm(true)
                         setAdding("subject")
-                        console.log("Adding Subject")
-                    }}>
-                        <BookOpen className="icon" />
-                        Add Subject
-                    </button>
-                    <button className="addSectionBTN" onClick={() => {
+                    }} />
+
+                    <NewRecordButton Icon={School} label={"Add a Section"} onClick={() => {
                         setShowForm(true)
                         setAdding("section")
-                        console.log("Adding Section")
-                    }}>
-                        <School className="icon" />
-                        Add Section
-                    </button>
+                    }} />
                 </section>
 
                 <span className="section_attend_Intro animation_left">
@@ -148,32 +229,33 @@ export default function Section() {
                 <section className="subject_section_container">
                     <section className="leftBox animation_right">
                         <div className="nav_box">
-                            <p className="title">Subjects</p>
-                            <input type="text" className="searchBar" placeholder="Search subject" onChange={e => searchSubject(e)} />
+                            <span className="leftSpan">
+                                <HeadingLg Icon={BookOpen} label={"Subjects"} />
+                            </span>
+                            <span className="rightSpan">
+                                <SearchBar searchFunc={searchSubject} placeholder={"Search a subject"} />
+                            </span>
                         </div>
                         {
                             subjects ? (
                                 <div className="subjectBox">
                                     {
                                         searchKeyword == "" ? (
-                                            <AddSubject subList={subjects} />
+                                            <SubjectList subList={subjects} setInst={setInstanceObj} status={updateStatus} isDone={updateDoneStatus} setMsg={setMsg} reflectChange={reflectChange} />
                                         ) : (
-                                            <AddSubject subList={searchResult} />
+                                            <SubjectList subList={searchResult} setInst={setInstanceObj} status={updateStatus} isDone={updateDoneStatus} setMsg={setMsg} reflectChange={reflectChange} />
                                         )
                                     }
                                 </div>
                             ) : (
-                                <section className="loaderBox">
-                                    <div className="loadingCircle"></div>
-                                    <p className="loadingText">Loading</p>
-                                </section>
+                                <Loader />
                             )
                         }
                     </section>
 
                     <section className="rightBox animation_left">
                         <div className="nav_box">
-                            <p className="title">Sections</p>
+                            <HeadingLg Icon={School} label={"Sections"} />
                         </div>
                         {
                             sections ? (
@@ -186,12 +268,11 @@ export default function Section() {
                                                         <p className="secName">{sec.section}</p>
                                                     </div>
                                                     <div className="btnBox_section">
-                                                        <button className="actionBTN">
-                                                            <SquarePen className="actionBTNIcon" />
-                                                        </button>
-                                                        <button className="actionBTN">
-                                                            <Trash className="actionBTNIcon" />
-                                                        </button>
+                                                        <ActionButton Icon={SquarePen} onClick={() => {
+                                                            setAdding("section")
+                                                            setInstanceObj(sec)
+                                                        }} />
+                                                        <ActionButton Icon={Trash} onClick={() => deleteSec(sec.id)} />
                                                     </div>
                                                 </div>
                                             )
@@ -209,9 +290,12 @@ export default function Section() {
                 </section >
             </main >
             {
-                showForm && <div className={`overlay_addSec fb_sec ${isFormClosing ? "overlay_addSec_closing" : ""}`}>
-                    <Adding close={closeForm} adding={adding} />
+                showForm && <div className={`overlayBox ${isFormClosing ? "overlayBoxClosing" : ""}`}>
+                    <AddNewRecord close={closeForm} status={updateStatus} isDone={updateDoneStatus} setMsg={setMsg} instance={instance} adding={adding} reflectChange={reflectChange} />
                 </div>
+            }
+            {
+                creationStatus && <div className="statusOverlay"><Status label={popMssg ? popMssg : ""} status={isDone} /></div>
             }
         </>
     )

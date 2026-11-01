@@ -1,21 +1,10 @@
-/* loginForm.css  */
-
-
-*{
-    padding: 0;
-    margin: 0;
-}
-
-body{
-    font-size: 10px;
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-}
-.fb-loginForm{
-    display: flex;
+.fb-loginForm {
+    display: none;
     justify-content: center;
     align-items: center;
 }
-.headerIconStyle{
+
+.headerIconStyle {
     width: 4rem;
     height: 4rem;
     min-width: .9rem;
@@ -23,7 +12,8 @@ body{
     padding: .5rem;
     color: blue;
 }
-.formBody{
+
+.formBody {
     width: 60%;
     max-width: 95%;
     max-width: 80vh;
@@ -34,58 +24,50 @@ body{
     border-radius: .8rem;
     box-shadow: 0 0 .2rem rgb(0, 28, 52);
 }
-.form{
+
+.form {
     width: 100%;
     flex-direction: column;
 }
 
-.closeBTNBox{
+.closeBTNBox {
     width: 95%;
     justify-content: right;
 }
-.closeIconStyle{
+
+.closeIconStyle {
     width: 1.2rem;
     height: 1.2rem;
 }
-.closeBTN{
-    border-radius: 50%;
-    padding: 0.3rem;
-    border: none;
-    outline: none;
-    box-shadow: 0 0.1rem 0.1rem rgb(0, 0, 0);
-    transition: all 0.3s ease;
-}
-.closeBTN:hover{
-    cursor: pointer;
-    box-shadow: inset 0 0.1rem 0.1rem rgb(0, 0, 0);
-}
-.closeBTN:active{
-    transform: scale(0.8);
-}
 
 
-.loginHeader{
+
+.loginHeader {
     width: 90%;
     height: fit-content;
     flex-direction: column;
 }
-.loginHeadLabel{
+
+.loginHeadLabel {
     font-size: 1.8rem;
     font-weight: 660;
     margin: .6rem 0;
     margin-bottom: 2rem;
 }
-.inputIconStyle{
+
+.inputIconStyle {
     width: 1.6rem;
     height: 1.6rem;
     color: red;
     margin: 0 .7rem;
 }
-.inputField{
+
+.inputField {
     width: 90%;
     margin: .4rem 0;
 }
-.input{
+
+.input {
     width: 70%;
     height: 1.9rem;
     padding: .3rem 1rem;
@@ -94,28 +76,211 @@ body{
     border-radius: .3rem;
 }
 
-.loginIcon{
+.loginIcon {
     width: 1.3rem;
     height: 1.3rem;
     padding: .2rem;
     margin: 0 .3rem;
 }
-.loginBTN{
-    width: 12rem;
-    height: fit-content;
-    font-size: 1rem;
-    border-radius: .3rem;
-    padding: .2rem;
-    margin: 1.5rem 0;
-    border: 1px solid rgba(0, 0, 0, 0.275);
-    background-color: rgb(255, 240, 221);
-    outline: none;
-    transition: all 0.3s ease;
+
+
+
+
+.loginForm {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 50%;
+    height: 70vh;
+    background-color: aliceblue;
 }
-.loginBTN:hover{
-    cursor: pointer;
-    background-color: rgb(255, 210, 152);
+
+.loginForm * {
+    display: flex;
 }
-.loginBTN:active{
-    transform: scale(0.8)
+
+.login_firstHalf {
+    width: 100%;
+    height: 50%;
+    justify-content: center;
+    position: relative;
+    background-color: aliceblue;
+}
+
+@scope (.login_firstHalf) {
+    .img {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        z-index: 1;
+        background-image: url("../../assets/loginPage.webp");
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+    }
+
+    .closeBTNBox {
+        width: 95%;
+        height: 15%;
+        justify-content: right;
+        align-items: flex-end;
+        position: absolute;
+        z-index: 2;
+    }
+
+    .closeBTN {
+        border-radius: 50%;
+        padding: 0.2rem;
+        border: none;
+        outline: none;
+        box-shadow: 0 0.1rem 0.1rem rgb(0, 0, 0);
+        transition: all 0.3s ease;
+        background-color: rgb(205, 231, 255);
+    }
+
+    .closeBTN:hover {
+        cursor: pointer;
+        box-shadow: inset 0 0.1rem 0.1rem rgb(0, 0, 0);
+    }
+
+    .closeBTN:active {
+        transform: scale(0.8);
+    }
+}
+
+
+.login_secondHalf {
+    width: 95%;
+    height: 50%;
+    align-items: center;
+    flex-direction: column;
+}
+
+
+.login_secondHalf .form {
+    width: 95%;
+    height: 80%;
+    flex-direction: column;
+    align-items: center;
+}
+
+@scope (.login_secondHalf .form) {
+    .formInputs {
+        width: 100%;
+        height: 75%;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        row-gap: 12%;
+    }
+
+    .input_login {
+        width: 80%;
+        height: fit-content;
+        background-color: aliceblue;
+        align-items: center;
+        box-shadow: 0 0 .1rem rgba(0, 0, 0, 0.534);
+        border-radius: .5rem;
+        overflow: hidden;
+    }
+
+    .loginIcon {
+        width: 1.3rem;
+        height: 1.3rem;
+        margin: 0;
+        margin-left: .1rem;
+        color: rgba(0, 0, 0, 0.404);
+    }
+
+    .input_login input {
+        width: 90%;
+        padding: .75rem .2rem;
+        border: none;
+        font-size: 0.9rem;
+        outline: none;
+        background-color: transparent;
+        color: rgb(39, 39, 39);
+    }
+
+    .formButtons {
+        width: 100%;
+        height: 25%;
+        justify-content: center;
+        align-items: flex-start;
+    }
+
+    .loginBTNIcon{
+        width: 1.5rem;
+        height: 1.5rem;
+    }
+    .loginBTN {
+        width: 35%;
+        height: 70%;
+        font-size: 1rem;
+        border-radius: .3rem;
+        column-gap: 10%;
+        border: none;
+        align-items: center;
+        justify-content: center;
+        color: rgb(255, 255, 255);
+        background-color: rgb(103, 179, 255);
+        outline: none;
+        transition: all 0.3s ease;
+    }
+
+    .loginBTN:hover {
+        cursor: pointer;
+        background-color: rgb(26, 140, 255);
+    }
+
+    .loginBTN:active {
+        transform: scale(0.8)
+    }
+
+
+
+    .loginLoader{
+        height: 70%;
+        aspect-ratio: 1/1;
+        border-top: 2px solid rgb(255, 255, 255);
+        border-radius: 50%;
+        animation: rot 1s ease .2s infinite, rotIn 0.2s ease forwards;
+    }
+    @keyframes rot {
+        from {
+            transform: rotate(0deg);
+        }
+        to {
+            transform: rotate(360deg);
+        }
+    }
+    @keyframes rotIn {
+        from {
+            opacity: 0;
+        }
+        to {
+            opacity: 1;
+        }
+    }
+}
+
+@scope (.login_secondHalf) {
+    .loginStatus {
+        width: 95%;
+        height: 20%;
+        justify-content: center;
+    }
+    .loginStatus p{
+       font-size: 0.9rem;
+       animation: status 0.3s ease-in forwards;
+       color: rgb(0, 0, 144);
+    }
+    @keyframes status {
+        from {
+            transform: translateY(4px);
+        }
+        to {
+            transform: translateY(0);
+        }
+    }
 }

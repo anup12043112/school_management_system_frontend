@@ -61,6 +61,7 @@ html {
         width: 95%;
         height: 10%;
         flex-direction: column;
+        justify-content: flex-start;
     }
 
     .dashboard {
@@ -76,8 +77,7 @@ html {
 
 .dashboard_admin .statBoxContainer {
     width: 95%;
-    height: 14%;
-    justify-content: center;
+    height: 20%;
     align-items: center;
 }
 
@@ -90,9 +90,10 @@ html {
         justify-content: center;
         border-radius: .6rem;
         background-color: aliceblue;
-        /* box-shadow: .2rem .2rem .2rem rgba(0, 0, 0, 0.2), -.2rem -.2rem .2rem rgb(255, 255, 255) ; */
+        box-shadow: .2rem .2rem .2rem rgba(0, 0, 0, 0.2);
     }
-    .stat{
+
+    .stat {
         width: 25%;
         height: auto;
         flex-direction: column;
@@ -100,12 +101,15 @@ html {
         row-gap: .4rem;
         padding: 1% 0;
     }
-    .border_right{
+
+    .border_right {
         border-right: 1px solid rgba(0, 0, 0, 0.197);
     }
-    .border_left{
+
+    .border_left {
         border-left: 1px solid rgba(0, 0, 0, 0.197);
     }
+
     .icon {
         width: 1.1rem;
         height: 1.1rem;
@@ -144,67 +148,22 @@ html {
     }
 }
 
+
+
 .dashboard_admin .quickUpdateContainer {
     width: 95%;
-    height: 68%;
+    height: 62%;
     justify-content: space-between;
+    align-items: center;
 }
 
 @scope(.dashboard_admin .quickUpdateContainer) {
-    .leftBox {
-        width: 68%;
-        height: 100%;
-        flex-direction: column;
-        justify-content: space-evenly;
-    }
-
-    .quickActionBTNBox {
-        width: 100%;
-        height: 10%;
-        align-items: center;
-        column-gap: 2rem;
-    }
-
-    .btnIcon {
-        width: 1.2rem;
-        height: 1.2rem;
-        color: rgb(0, 53, 65);
-    }
-
-    .quickAction {
-        padding: .5rem 1.6rem;
-        font-size: 0.85rem;
-        text-decoration: none;
-        font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-        column-gap: .4rem;
-        justify-content: center;
-        background-color: rgb(189, 244, 255);
-        align-items: center;
-        color: rgb(0, 139, 170);
-        border-radius: .4rem;
-        border: none;
-        box-shadow: inset -.1rem -.1rem .2rem rgba(0, 0, 0, 0.2), inset .1rem .1rem .2rem rgb(255, 255, 255);
-        transition: all 0.3s ease;
-        margin-top: 1rem;
-    }
-
-    .quickAction:hover {
-        cursor: pointer;
-        transform: scale(1.1);
-    }
-
-    .quickAction:active {
-        transform: scale(0.9);
-    }
-
     .assigned_teachersBox {
-        width: 100%;
-        height: 80%;
+        width: 68%;
+        height: 95%;
         position: relative;
         border-radius: .5rem;
-        /* box-shadow: .2rem .2rem .2rem rgba(0, 0, 0, 0.2), -.2rem -.2rem .2rem rgb(255, 255, 255); */
-        background-color:rgb(255, 246, 246);
-        box-shadow: 0 0 .2rem rgba(0, 0, 0, 0.299);
+        box-shadow: .2rem .2rem .2rem rgba(0, 0, 0, 0.2), -.2rem -.2rem .2rem rgb(255, 255, 255);
         flex-direction: column;
         align-items: center;
         overflow: hidden;
@@ -218,11 +177,6 @@ html {
         padding: 1rem 0;
     }
 
-    .nav_asT .title {
-        font-size: 1.2rem;
-        font-weight: 550;
-    }
-
     .filterBTN {
         font-size: .9rem;
         padding: .3rem .6rem;
@@ -230,6 +184,11 @@ html {
         color: rgb(0, 128, 175);
         outline: none;
         border: 1px solid;
+        transition: all 0.3s ease;
+    }
+    .filterBTN:hover{
+        cursor: pointer;
+        color: rgb(119, 0, 255);
     }
 
     .filterBTNBox .option {
@@ -248,89 +207,95 @@ html {
         overflow-x: hidden;
         flex-wrap: wrap;
         align-content: flex-start;
-        column-gap: 3rem;
-        row-gap: 1rem;
-
-        scrollbar-width: thin;
-        scrollbar-color: #9ca3af transparent;
+        column-gap: 3.3%;
+        row-gap: 1.5rem;
     }
 
     .listBox::-webkit-scrollbar {
-        width: 5px;
-    }
-
-    .listBox::-webkit-scrollbar-track {
-        background: transparent;
-    }
-
-    .listBox::-webkit-scrollbar-thumb {
-        background-color: #9ca3af;
-        border-radius: 10px;
-    }
-
-    .listBox::-webkit-scrollbar-thumb:hover {
-        background-color: #6b7280;
+        display: none;
     }
 
     .assigned {
-        width: 28%;
-        min-height: 100px;
-        flex-direction: column;
-        border-radius: .5rem;
-        /* box-shadow: .2rem .2rem .2rem rgba(0, 0, 0, 0.2), -.2rem -.2rem .2rem rgb(255, 255, 255); */
-        background-color:rgb(233, 245, 255);
-        border: 1px solid rgba(0, 0, 0, 0.233);
-        padding: 0.6rem 1rem;
-        box-sizing: border-box;
-        flex-shrink: 0;
-    }
-
-    .teacher_name {
-        font-size: 1.3rem;
-        font-weight: 550;
-        color: rgb(0, 80, 199);
-    }
-
-    .teacher_section {
-        font-size: 0.8rem;
-        column-gap: .5rem;
-        color: rgb(42, 42, 42);
-        margin: .5rem 0;
-    }
-
-    .teacher_subject {
-        font-size: 0.75rem;
-        font-weight: 550;
-        color: rgb(0, 135, 0);
-    }
-
-    .rightBox {
         width: 30%;
         height: auto;
         flex-direction: column;
+        border-radius: .5rem;
+        align-items: center;
+        background-color: rgb(255, 255, 255);
+        box-shadow: .2rem .2rem .2rem rgba(0, 0, 0, 0.211);
+        flex-shrink: 0;
+        overflow: hidden;
+    }
+    .uHalf{
+        width: 90%;
+        justify-content: space-between;
+        align-items: center;
+        padding: 2% 0;
+    }
+    .uHalf img{
+        width: 1.6rem;
+        height: 1.6rem;
+        flex-shrink: 0;
+        border-radius: 50%;
+    }
+    .name{
+        font-size: 1.1rem;
+        font-weight: 550;
+        color: rgb(94, 0, 182);
+    }
+    .lHalf{
+        width: 90%;
+        padding-top: 5%;
+        padding-bottom: 2%;
+        column-gap: 2%;
+        align-items: center;
+        padding-bottom: 2%;
+    }
+    .subject{
+        font-size: 0.9rem;
+        font-weight: 550;
+    }
+    .section{
+        font-size: 0.85rem;
+        color: rgb(56, 56, 56);
+    }
+    .rightBox {
+        width: 30%;
+        height: 95%;
+        flex-direction: column;
+        align-items: center;
+        border-radius: .7rem;
+        box-shadow: .2rem .2rem .2rem rgba(0, 0, 0, 0.2);
+        background-color: aliceblue;
+    }
+
+    .nav_n {
+        width: 90%;
+        height: 10%;
         align-items: center;
     }
-    .nav_n{
-        width: 95%;
-        height: 12%;
-        align-items: end;
-        margin-bottom: 7%;
-    }
-    .noticeHead{
-        font-size: 1.3rem ;
+
+    .noticeHead {
+        font-size: 1.3rem;
         font-weight: 550;
         color: rgb(0, 0, 118);
     }
-    .noticeBox{
+
+    .noticeBox {
         width: 95%;
-        height: 78%;
-        border-radius: .7rem;
-        box-shadow: .2rem .2rem .2rem rgba(0, 0, 0, 0.2), -.2rem -.2rem .2rem rgb(255, 255, 255);
+        height: 85%;
+        padding: 2.5% 0;
         align-items: center;
-        justify-content: space-evenly;
         flex-direction: column;
+        overflow-y: auto;
+        row-gap: 1rem;
     }
-    .notice{
+
+    .noticeBox::-webkit-scrollbar {
+        display: none;
+    }
+
+    .notice {
         width: 90%;
         height: fit-content;
         padding: .5rem .5rem;
@@ -339,22 +304,27 @@ html {
         border-radius: .2rem;
         align-items: center;
     }
-    .noticeIcon{
+
+    .noticeIcon {
         color: rgb(0, 106, 255);
         width: 1.7rem;
         height: 1.7rem;
+        flex-shrink: 0;
     }
-    .noticeInfo{
+
+    .noticeInfo {
         padding: 0 .7rem;
         flex-direction: column;
         row-gap: .35rem;
     }
-    .notice_header{
+
+    .notice_header {
         font-size: 1rem;
         font-weight: 550;
         color: rgb(0, 138, 2);
     }
-    .postedBy{
+
+    .postedBy {
         font-size: 0.7rem;
         column-gap: .3rem;
     }

@@ -3,13 +3,15 @@ import { Link, useLocation } from "react-router-dom"
 import { UserRoundCheck, House, SquarePercent, MessageSquareMore, UserPen, School, BookText, UsersRound, LogOut } from "lucide-react"
 import { useContext } from "react"
 import { AuthContext } from "../context/AuthContext"
+import { DataContext } from "../context/DataContext"
 
 
 export default function AdminNavbar() {
     const loc = useLocation()
 
     const currentPath = loc.pathname
-    const {logout} = useContext(AuthContext)
+    const { logout } = useContext(AuthContext)
+    const { clearData } = useContext(DataContext)
 
 
     return (
@@ -26,32 +28,35 @@ export default function AdminNavbar() {
                     <p className="navigationLabel">Users</p>
                 </Link>
 
-                <Link className={`navBTN fb-nav ${currentPath.includes("/admin/sections")? "selectedNavBTN" : ""}`} to="/admin/sections">
+                <Link className={`navBTN fb-nav ${currentPath.includes("/admin/sections") ? "selectedNavBTN" : ""}`} to="/admin/sections">
                     <School className="navBTNIconStyle" />
                     <p className="navigationLabel">Section & Subjects</p>
                 </Link>
 
-                <Link className={`navBTN fb-nav ${currentPath.includes("/admin/attendance")? "selectedNavBTN" : ""}`} to="/admin/attendance">
+                <Link className={`navBTN fb-nav ${currentPath.includes("/admin/attendance") ? "selectedNavBTN" : ""}`} to="/admin/attendance">
                     <BookText className="navBTNIconStyle" />
                     <p className="navigationLabel">Attendance</p>
                 </Link>
 
-                <Link className={`navBTN fb-nav ${currentPath.includes("/admin/marks")? "selectedNavBTN" : ""}`} to="/admin/marks">
+                <Link className={`navBTN fb-nav ${currentPath.includes("/admin/marks") ? "selectedNavBTN" : ""}`} to="/admin/marks">
                     <SquarePercent className="navBTNIconStyle" />
                     <p className="navigationLabel">Marks</p>
                 </Link>
 
-                <Link className={`navBTN fb-nav ${currentPath.includes("/admin/notice")? "selectedNavBTN" : ""}`} to="/admin/notice">
+                <Link className={`navBTN fb-nav ${currentPath.includes("/admin/notice") ? "selectedNavBTN" : ""}`} to="/admin/notice">
                     <MessageSquareMore className="navBTNIconStyle" />
                     <p className="navigationLabel">Notice</p>
                 </Link>
 
             </section>
             <section className="navContainer fb-nav nav-logoutBTNBox">
-                <button className="logoutBTN fb-nav" onClick={logout}>
+                <button className="logoutBTN fb-nav" onClick={() => {
+                    clearData()
+                    logout()
+                }}>
                     <LogOut className="navBTNIconStyle" />
                     Logout
-                    </button>
+                </button>
             </section>
         </nav>
     )

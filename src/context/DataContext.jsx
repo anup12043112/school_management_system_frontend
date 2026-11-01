@@ -1,80 +1,99 @@
-import { createContext, useState, useEffect } from "react";
-import { request } from "../services/apiClient";
+import { createContext } from "react";
+import { useState } from "react";
+import { request } from "../services/apiClient"
 
 export const DataContext = createContext()
 
 export function DataProvider({ children }) {
-    const [marks, setMarks] = useState(null)
-    const [notice, setNotice] = useState(null)
-    const [profile, setProfile] = useState(null)
-    const [parents, setParents] = useState(null)
-    const [sections, setSections] = useState(null)
-    const [subjects, setSubjects] = useState(null)
-    const [users, setUsers] = useState(null)
-    const [teachers, setTeachers] = useState(null)
-    const [teaching_assignment, setTeaching_assignment] = useState(null)
-    const [students, setStudents] = useState(null)
+    const [sections, setSections] = useState("")
+    const [parents, setParents] = useState("")
+    const [subjects, setSubjects] = useState("")
+    const [students, setStudents] = useState("")
+    const [teachers, setTeachers] = useState("")
+    const [teaching_assignment, setTeaching_assignment] = useState("")
+    const [teaching_assignmentFiltered, setTeaching_assignmentFiltered] = useState("")
+    const [profile, setProfile] = useState("")
+    const [notice, setNotice] = useState("")
+    
+    async function fetchSections(){
+        const res = await request({url: "/api/sections/", method: "GET"})
+        if (res.status){
+            setSections(res.data)
+        }
+    }
 
+    async function fetchSubjects(){
+        const res = await request({url: "/api/subjects/", method: "GET"})
+        if (res.status){
+            setSubjects(res.data)
+        }
+    }
 
+    async function fetchStudents(){
+        const res = await request({url: "/api/students/", method: "GET"})
+        if (res.status){
+            setStudents(res.data)
+        }
+    }
 
+    async function fetchTeachers(){
+        const res = await request({url: "/api/teachers/", method: "GET"})
+        if (res.status){
+            setTeachers(res.data)
+        }
+    }
 
-    useEffect(() => {
-        const getData = async () => {
-            const marks = await request({url: "/api/marks/", method: "GET"})
-            const notice = await request({url: "/api/notices/", method: "GET"})
-            const profile = await request({url: "/api/auth/me/", method: "GET"})
-            const parent = await request({url: "/api/parents/", method: "GET"})
-            const sections = await request({url: "/api/sections/", method: "GET"})
-            const student = await request({url: "/api/students/", method: "GET"})
-            const subject = await request({url: "/api/subjects/", method: "GET"})
-            const teacher = await request({url: "/api/teachers/", method: "GET"})
-            const teaching_assignment = await request({url: "/api/teaching-assignments/", method: "GET"})
-            const user = await request({url: "/api/users/", method: "GET"})
-           
-            if (marks.status){
-                // console.log("Marks", marks.data)
-                setMarks(marks.data)
+    async function fetchParents(){
+        const res = await request({url: "/api/parents/", method: "GET"})
+        if (res.status){
+            setParents(res.data)
+        }
+    }
+
+    async function fetchTeachingAssignment(e){
+        let val = ""
+        if (e){
+             val = e.target.value
+        }
+        if (val === "all" || val === "") {
+            const req = await request({ url: "/api/teaching-assignments/", method: "GET" })
+            if (req.status) {
+                setTeaching_assignment(req.data)
             }
-            if (notice.status){
-                // console.log("Notice", notice.data)
-                setNotice(notice.data)
-            }
-            if (profile.status){
-                // console.log("Profile", profile.data)
-                setProfile(profile.data)
-            }
-            if (parent.status){
-                // console.log("Parent", parent.data)
-                setParents(parent.data)
-            }
-            if (sections.status){
-                // console.log("Sections", sections.data)
-                setSections(sections.data)
-            }
-            if (teacher.status){
-                // console.log("Sections", sections.data)
-                setTeachers(teacher.data)
-            }
-            if (teaching_assignment.status){
-                // console.log(teaching_assignment.data)
-                setTeaching_assignment(teaching_assignment.data)
-            }
-            if (subject.status){
-                // console.log("Subjects", subject.data)
-                setSubjects(subject.data)
-            }
-            if (student.status){
-                // console.log("Students", student.data)
-                setStudents(student.data)
-            }
-            if (user.status){
-                // console.log("Users", user.data)
-                setUsers(user.data)
+        } else {
+            const req = await request({ url: `/api/teaching-assignments/?section=${val}`, method: "GET" })
+            if (req.status) {
+                setTeaching_assignment(req.data)
             }
         }
-        getData()
-    }, [])
-    return <DataContext.Provider value={{marks, setMarks, notice, setNotice, profile, setProfile, sections, setSections, subjects, setSubjects, users, setUsers, teachers, setTeachers, students, setStudents, teaching_assignment, setTeaching_assignment, parents, setParents}}>
-        {children}
-    </DataContext.Provider>
+    }
+
+    async function fetchProfile(){
+        const res = await request({url: "/api/auth/me/", method: "GET"})
+        if (res.status){
+            setProfile(res.data)
+        }
+    }
+
+    async function fetchNotice(){
+        const res = await request({url: "/api/notices/", method: "GET"})
+        if (res.status){
+            setNotice(res.data)
+        }
+    }
+
+    function clearData(){
+        setParents("")
+        setProfile("")
+        setSections("")
+        setSubjects("")
+        setTeachers("")
+        setTeaching_assignment("")
+   }
+
+    return (
+        <DataContext.Provider value={{ sections, fetchSections, subjects, fetchSubjects, students, fetchStudents, teachers, fetchTeachers, teaching_assignment, fetchTeachingAssignment, setTeaching_assignment, teaching_assignmentFiltered, setTeaching_assignmentFiltered, profile, fetchProfile, parents, fetchParents, notice, fetchNotice, clearData}}>
+            {children}
+        </DataContext.Provider>
+    )
 }

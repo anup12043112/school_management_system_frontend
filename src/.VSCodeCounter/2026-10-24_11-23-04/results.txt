@@ -1,0 +1,41 @@
+Date : 2026-10-24 11:23:04
+Directory : d:\Full Stack Project\School Management System\React\src\styles
+Total : 14 files,  2296 codes, 9 comments, 295 blanks, all 2600 lines
+
+Languages
++----------+------------+------------+------------+------------+------------+
+| language | files      | code       | comment    | blank      | total      |
++----------+------------+------------+------------+------------+------------+
+| PostCSS  |         14 |      2,296 |          9 |        295 |      2,600 |
++----------+------------+------------+------------+------------+------------+
+
+Directories
++------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                                     | files      | code       | comment    | blank      | total      |
++------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                                        |         14 |      2,296 |          9 |        295 |      2,600 |
+| . (Files)                                                                                |          4 |        336 |          3 |         51 |        390 |
+| admin                                                                                    |          7 |      1,772 |          3 |        226 |      2,001 |
+| components                                                                               |          3 |        188 |          3 |         18 |        209 |
++------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++------------------------------------------------------------------------------------------+----------+------------+------------+------------+------------+
+| filename                                                                                 | language | code       | comment    | blank      | total      |
++------------------------------------------------------------------------------------------+----------+------------+------------+------------+------------+
+| d:\Full Stack Project\School Management System\React\src\styles\admin\adminDash.css      | PostCSS  |        287 |          0 |         44 |        331 |
+| d:\Full Stack Project\School Management System\React\src\styles\admin\adminMarks.css     | PostCSS  |        403 |          0 |         24 |        427 |
+| d:\Full Stack Project\School Management System\React\src\styles\admin\adminNav.css       | PostCSS  |         78 |          3 |          5 |         86 |
+| d:\Full Stack Project\School Management System\React\src\styles\admin\adminNotice.css    | PostCSS  |        306 |          0 |         48 |        354 |
+| d:\Full Stack Project\School Management System\React\src\styles\admin\adminSubjects.css  | PostCSS  |        210 |          0 |         27 |        237 |
+| d:\Full Stack Project\School Management System\React\src\styles\admin\adminUsers.css     | PostCSS  |        247 |          0 |         40 |        287 |
+| d:\Full Stack Project\School Management System\React\src\styles\admin\sections.css       | PostCSS  |        241 |          0 |         38 |        279 |
+| d:\Full Stack Project\School Management System\React\src\styles\animation.css            | PostCSS  |         60 |          0 |          6 |         66 |
+| d:\Full Stack Project\School Management System\React\src\styles\commonCSS.css            | PostCSS  |         50 |          2 |         10 |         62 |
+| d:\Full Stack Project\School Management System\React\src\styles\components\buttons.css   | PostCSS  |         48 |          2 |          8 |         58 |
+| d:\Full Stack Project\School Management System\React\src\styles\components\heading.css   | PostCSS  |         27 |          0 |          2 |         29 |
+| d:\Full Stack Project\School Management System\React\src\styles\components\loginForm.css | PostCSS  |        113 |          1 |          8 |        122 |
+| d:\Full Stack Project\School Management System\React\src\styles\landingPage.css          | PostCSS  |        199 |          1 |         34 |        234 |
+| d:\Full Stack Project\School Management System\React\src\styles\loader.css               | PostCSS  |         27 |          0 |          1 |         28 |
+| Total                                                                                    |          |      2,296 |          9 |        295 |      2,600 |
++------------------------------------------------------------------------------------------+----------+------------+------------+------------+------------+

@@ -1,98 +1,78 @@
 import "../../styles/admin/adminNotice.css"
 import "../../styles/commonCSS.css"
-import { useState, useEffect, useContext } from "react"
+import { useState, useEffect } from "react"
 import { request } from "../../services/apiClient"
-import { DataContext } from "../../context/DataContext"
 import { capitalize } from "../../services/utils"
-import { X, Trash, ScrollText, ClipboardPlus, Megaphone, UserShield, BellRing } from "lucide-react"
+import { Trash, Megaphone } from "lucide-react"
+
 import Loader from "../../components/Loader"
+import { Input, Status } from "../../components/Loader"
+import { HeadingLg, OverlayHead } from "../../components/Headings"
+import { FormButton, ActionButton, NewRecordButton } from "../../components/Buttons"
 
 
-function AddNotice({ close }) {
-    const [title, setTitle] = useState(null)
-    const [desc, setDesc] = useState(null)
-    const [postedBy, setPostedBy] = useState(null)
-    const { profile } = useContext(DataContext)
+
+function AddNewRecord({ close, status, isDone, setMsg, reflectChange }) {
+    const [userObj, setUserObj] = useState({})
+    const [profile, setProfile] = useState("")
 
     useEffect(() => {
-        if (profile) {
-            const role = capitalize(String(profile.role))
-            setPostedBy(role)
-        }
-    }, [profile])
-
-    async function createNotice() {
-        if (title && desc) {
-            const req = await request({
-                url: "/api/notice/", method: "POST", body: {
-                    header: title,
-                    description: desc,
-                    posted_by: postedBy
-                }
-            })
-
-            if (req.status) {
-                alert("Notice Created")
-            } else {
-                alert("Something went wrong")
+        async function getProfile() {
+            const res = await request({ url: "/api/auth/me/", method: "GET" })
+            if (res.status) {
+                const by = `${res.data.first_name} ${res.data.last_name} (${capitalize(String(res.data.role))})`
+                setUserObj(prev => ({ ...prev, posted_by: by }))
             }
         }
+        getProfile()
+    }, [])
+
+    async function performAction() {
+        console.log(userObj)
+        if (userObj.header && userObj.description && userObj.posted_by) {
+            const res = await request({ url: "/api/notices/", method: "POST", body: userObj })
+            console.log(res)
+            status()
+            if (res.status && res.data.id) {
+                console.log(res.data.id)
+                isDone()
+                setMsg(`Notice is created successfully.`)
+                setUserObj({})
+                reflectChange()
+                close()
+            } else {
+                status()
+                setMsg("Something went wrong")
+            }
+
+        } else {
+            status()
+            setMsg("Every field is required.")
+        }
+    }
+
+    function setValue(e) {
+        setUserObj(prev => (
+            { ...prev, [e.target.name]: e.target.value }
+        ))
     }
     return (
-        <main className="noticeForm_admin">
+        <main className="newRecordNotice">
+            <div className="headNotice">
+                <OverlayHead Icon={Megaphone} label={"Add Notice"} onClick={close} />
+            </div>
 
-            <nav className="nav">
-                <span>
-                    <ClipboardPlus className="icon" />
-                    <p className="noticeFormTitle">Create Notice</p>
-                </span>
-                <span>
-                    <button className="closeForm" onClick={close}>
-                        <X className="close" />
-                    </button>
-                </span>
-            </nav>
-
-            <form className="body">
-
-                <div className="firstSet">
-                    <span className="firstInputSet">
-                        <p className="inputLabel">Title</p>
-                        <input
-                            type="text"
-                            className="input1"
-                            placeholder="Title of the notice"
-                            required
-                            onChange={e => setTitle(e.target.value)}
-                        />
-                    </span>
-
-                    <span className="firstInputSet">
-                        <p className="inputLabel">Posted By</p>
-                        <input
-                            type="text"
-                            className="input1"
-                            value={postedBy}
-                        />
-                    </span>
+            <form className="bodyNotice">
+                <div className="inputSet">
+                    <Input name={"header"} label={"Header"} value={userObj.header} onChange={e => setValue(e)} placeholder={"Notice Header"} />
+                    <Input name={"description"} label={"Description"} value={userObj.description} onChange={e => setValue(e)} placeholder={"Notice Description"} />
                 </div>
 
-                <div className="secondSet">
-                    <span className="secondInputSet">
-                        <p className="inputLabel">Description</p>
-                        <textarea
-                            type="text"
-                            className="input2"
-                            placeholder="Description of the notice"
-                            required
-                            onChange={e => setDesc(e.target.value)}
-                        />
-                    </span>
+                <div className="inputSet">
+                    <Input name={"posted_by"} label={"Posted By"} value={userObj.posted_by} readOnly={true} />
                 </div>
 
-                <span className="buttonSpan">
-                    <button type="button" onClick={() => createNotice()} className="createBTN">Create</button>
-                </span>
+                <FormButton onClick={performAction} label={"Create Notice"} />
             </form>
         </main>
     )
@@ -101,12 +81,38 @@ function AddNotice({ close }) {
 export default function Notice() {
     const [notice, setNotice] = useState("")
     const [showForm, setShowForm] = useState(false)
-    const [isClosing, setIsClosing] = useState(false)
+    const [isFormClosing, setIsFormClosing] = useState(false)
+
+    const [creationStatus, setCreationStatus] = useState(false)
+    const [isDone, setIsDone] = useState(false)
+    const [popMssg, setPopMsg] = useState("Something went wrong")
+
+    function closeForm() {
+        setIsFormClosing(true)
+        setTimeout(() => {
+            setShowForm(false)
+            setIsFormClosing(false)
+        }, 300)
+    }
+
+    function updateStatus() {
+        setCreationStatus(true)
+        setTimeout(() => {
+            setCreationStatus(false)
+            setIsDone(false)
+            setPopMsg("Something went wrong")
+        }, 2000)
+    }
+    function updateDoneStatus() {
+        setIsDone(true)
+    }
+    function setMsg(msg) {
+        setPopMsg(msg)
+    }
 
     useEffect(() => {
         async function getData() {
             const res = await request({ url: "/api/notices/", method: "GET" })
-            console.log(res.data)
             if (res.status) {
                 setNotice(res.data)
             }
@@ -114,22 +120,30 @@ export default function Notice() {
         getData()
     }, [])
 
-
-    function close() {
-        setIsClosing(true)
-        setTimeout(() => {
-            setShowForm(false)
-            setIsClosing(false)
-        }, 300)
+    async function reflectChange() {
+        const res = await request({ url: "/api/notices/", method: "GET" })
+        if (res.status) {
+            setNotice(res.data)
+        }
     }
+
+    const deleteNotice = async (id) => {
+        const res = await request({ url: `/api/notices/${id}/`, method: "DELETE" })
+        updateStatus()
+        if (res.data === null) {
+            updateDoneStatus()
+            setMsg("Notice is deleted successfully")
+            reflectChange()
+        } else {
+            setMsg("Deletion unsuccessful.")
+        }
+    }
+
     return (
         <>
             <main className="notice_admin">
                 <section className="nav animation_left">
-                    <button className="addNewRecordBTN" onClick={() => setShowForm(true)}>
-                        <Megaphone className="icon" />
-                        Add Notice
-                    </button>
+                    <NewRecordButton label={"Add Notice"} Icon={Megaphone} onClick={() => setShowForm(true)} />
                 </section>
 
                 <span className="marksIntro animation_left">
@@ -138,8 +152,7 @@ export default function Notice() {
 
                 <section className="bottomBox animation_right">
                     <div className="header">
-                        <Megaphone className="icon" />
-                        <p>All Notice</p>
+                        <HeadingLg Icon={Megaphone} label={"All Notice"} />
                     </div>
                     {
                         notice ? (
@@ -147,10 +160,10 @@ export default function Notice() {
                                 {
                                     notice.map(n => {
                                         return (
-                                            <div className="notice">
+                                            <div className="notice" key={n.id}>
                                                 <div className="head">
                                                     <p className="noticeHeader">{n.header}</p>
-                                                    <button><Trash className="icon" /></button>
+                                                    <ActionButton Icon={Trash} onClick={() => deleteNotice(n.id)} />
                                                 </div>
                                                 <div className="noticeBody">
                                                     <p className="desc">{n.description}</p>
@@ -170,9 +183,12 @@ export default function Notice() {
                 </section>
             </main>
             {
-                showForm && <div className={`overlay_noticeForm_admin ${isClosing ? "closing" : ""}`}>
-                    <AddNotice close={close} />
+                showForm && <div className={`overlayBox ${isFormClosing ? "overlayBoxClosing" : ""}`}>
+                    <AddNewRecord close={closeForm} status={updateStatus} isDone={updateDoneStatus} setMsg={setMsg} reflectChange={reflectChange} />
                 </div>
+            }
+            {
+                creationStatus && <div className="statusOverlay"><Status label={popMssg ? popMssg : ""} status={isDone} /></div>
             }
         </>
     )

@@ -1,41 +1,134 @@
 import "../../styles/admin/adminSubjects.css"
 import "../../styles/commonCSS.css"
-import Loader from "../../components/Loader"
-import { useState, useEffect, useContext } from "react"
+import { useState, useEffect} from "react"
 import { request } from "../../services/apiClient"
-import { DataContext } from "../../context/DataContext"
-import { CircleUserIcon, SquarePen, Trash, X, Pen, BookSearch, BookText } from "lucide-react"
+import { CircleUserIcon, Trash, BookText, SquarePen } from "lucide-react"
 
-const AddNewSubject = ({ close }) => {
-    const [sub, setSub] = useState(null)
-    const [subCode, setSubCode] = useState(null)
+import { NewRecordButton, ActionButton, FormButton, ChangePageButton } from "../../components/Buttons"
+import Loader from "../../components/Loader"
+import { HeadingLg, OverlayHead } from "../../components/Headings"
+import { Input } from "../../components/Loader"
+import { Status } from "../../components/Loader"
 
-    async function createSub() {
-        if (sub && subCode) {
-            const req = await request({ url: "/api/subject/", method: "POST", body: { code: subCode, subject: sub } })
-            if (req.status) {
-                close()
-                alert("Created Sucessfully !")
+
+
+function AddNewRecord({ close, instance, status, isDone, setMsg, reflectChange }) {
+    const [userObj, setUserObj] = useState(instance || {})
+    const { students } = useContext(DataContext)
+
+
+    async function performAction() {
+        console.log(userObj)
+        console.log(instance)
+        console.log(userObj === instance)
+        if (userObj.student_id && typeof userObj.attendance === "boolean" && userObj.date && userObj.date) {
+            if (Object.keys(instance || {}).length === 0) {
+                // CREATION 
+                const res = await request({ url: "/api/attendance/", method: "POST", body: userObj })
+                console.log(res)
+                status()
+                if (res.status && res.data.id) {
+                    console.log(res.data.id)
+                    isDone()
+                    close()
+                    setMsg(`Attendance is created successfully.`)
+                    reflectChange()
+                    setUserObj({})
+                } else {
+                    status()
+                    setMsg("Something went wrong")
+                }
+            } else {
+                // MODIFICATION 
+                const res = await request({ url: `/api/attendance/${userObj.id}/`, method: "PATCH", body: userObj })
+                console.log(res)
+                status()
+                if (res.data.id) {
+                    isDone()
+                    close()
+                    setMsg(`Attendance is updated successfully.`)
+                    reflectChange()
+                } else {
+                    setMsg(`Can't update the User right now, try again later.`)
+                }
             }
+
         } else {
-            alert("Fill all required fields !")
-            return
+            setMsg("Every field is required.")
         }
     }
 
+    function setValue(e) {
+        setUserObj(prev => (
+            { ...prev, [e.target.name]: e.target.value }
+        ))
+    }
+    function setBooleanValue(e) {
+        if (e.target.value === "true") {
+            setUserObj(prev => (
+                { ...prev, [e.target.name]: true }
+            ))
+        } else {
+            setUserObj(prev => (
+                { ...prev, [e.target.name]: false }
+            ))
+        }
+    }
     return (
-        <section className="addAttendanceBox"></section>
+        <main className="newRecordAtt">
+            <div className="headAtt">
+                <OverlayHead Icon={BookText} label={"Add Attendance"} onClick={close} />
+            </div>
+
+            <form className="bodyAtt">
+
+                <div className="inputSet">
+                    {
+                        Object.keys(instance || {}).length === 0 ? (
+                            <span>
+                                <p>Select Student</p>
+                                <select name="student_id" onChange={e => setValue(e)}>
+                                    <option value="" disabled selected>Select Student</option>
+                                    {
+                                        students ? (
+                                            students.map(stu => {
+                                                return <option value={stu.id} >{stu.user.username}</option>
+                                            })
+                                        ) : (
+                                            <option value="" disabled>Unable to fetch student list</option>
+                                        )
+                                    }
+                                </select>
+                            </span>
+                        ) : (
+                            <Input name={"student_id"} label={"Student"} value={userObj.student ?? ""} readOnly={true} />
+                        )
+                    }
+                    <span>
+                        <p>Attendance</p>
+                        <select name="attendance" onChange={e => setBooleanValue(e)} value={userObj.attendance ?? ""}>
+                            <option value="" disabled hidden>Status</option>
+                            <option value="true" >Present</option>
+                            <option value="false" >Absent</option>
+                        </select>
+                    </span>
+                </div>
+
+                <div className="inputSet">
+                    <Input name={"date"} onChange={e => setValue(e)} placeholder={""} label={"Date"} value={userObj.date ?? ""} type={"date"} />
+                </div>
+
+                <FormButton onClick={performAction} label={Object.keys(instance || {}).length === 0 ? "Create Attendance" : "Update"} />
+            </form>
+        </main>
     )
 }
 
-
 export default function Subjects() {
-    const { sections } = useContext(DataContext)
+    const [sections, setSections] = useState("")
     const [attendance, setAttendance] = useState(null)
-    const [deleting, setDeleting] = useState(null)
-    const [showForm, setShowForm] = useState(false)
-    const [isFormClosing, setIsFormClosing] = useState(false)
 
+    const [presentPage, setPresentPage] = useState("")
     let [currentPage, setCurrentPage] = useState(1)
     const [prev, setPrev] = useState("")
     const [next, setNext] = useState("")
@@ -44,28 +137,17 @@ export default function Subjects() {
     const [filter1, setFilter1] = useState("")
     const [filter2, setFilter2] = useState("")
 
+    const [showForm, setShowForm] = useState(false)
+    const [isFormClosing, setIsFormClosing] = useState(false)
 
-    useEffect(() => {
-        const getData = async () => {
-            const res = await request({ url: "/api/attendance/", method: "GET" })
+    const [creationStatus, setCreationStatus] = useState(false)
+    const [isDone, setIsDone] = useState(false)
+    const [popMssg, setPopMsg] = useState("Something went wrong")
 
-            if (res.data.previous) {
-                setPrev(res.data.previous)
-            } 
-
-            if (res.data.next) {
-                setNext(res.data.next)
-            }
-
-            if (res.status) {
-                console.log("Attendance", res.data)
-                setAttendance(res.data.results)
-            }
-        }
-        getData()
-    }, [])
+    const [instance, setInstance] = useState({})
 
     function closeForm() {
+        setInstance({})
         setIsFormClosing(true)
         setTimeout(() => {
             setShowForm(false)
@@ -73,16 +155,80 @@ export default function Subjects() {
         }, 300)
     }
 
-    async function deleteAtt() {
-        const del = await request({ url: `/api/attendance/${deleting}/`, method: "DELETE" })
-        if (del.status) {
-            alert("Deletion sucessful !")
+    function updateStatus() {
+        setCreationStatus(true)
+        setTimeout(() => {
+            setCreationStatus(false)
+            setIsDone(false)
+            setPopMsg("Something went wrong")
+        }, 2000)
+    }
+    function updateDoneStatus() {
+        setIsDone(true)
+    }
+    function setMsg(msg) {
+        setPopMsg(msg)
+    }
+    function setInstanceObj(e) {
+        const obj = {
+            id: e.id,
+            attendance: e.attendance,
+            date: e.date,
+            student_id: e.student.id,
+            student: e.student.user.username
+        }
+        setInstance(obj)
+        setShowForm(true)
+    }
+
+
+    useEffect(() => {
+        const getData = async () => {
+            setPresentPage("/api/attendance/")
+            const res = await request({ url: "/api/attendance/", method: "GET" })
+            const sec = await request({ url: "/api/sections/", method: "GET" })
+
+            if (res.data.previous) {
+                setPrev(res.data.previous)
+            }
+
+            if (res.data.next) {
+                setNext(res.data.next)
+            }
+
+            if (res.status) {
+                setAttendance(res.data.results)
+            }
+            if (sec.status) {
+                setSections(sec.data)
+            }
+        }
+        getData()
+    }, [])
+
+    async function reflectChange() {
+        const res = await request({ url: presentPage, method: "GET" })
+        if (res.status) {
+            setAttendance(res.data.results)
+        }
+    }
+
+    const deleteAtt = async (id) => {
+        const res = await request({ url: `/api/attendance/${id}/`, method: "DELETE" })
+        updateStatus()
+        if (res.data === null) {
+            updateDoneStatus()
+            setMsg("Attendance is deleted successfully")
+            reflectChange()
+        } else {
+            setMsg("Deletion unsuccessful.")
         }
     }
 
     async function prevPage(url) {
         const u = new URL(url)
         const params = u.search
+        setPresentPage(`/api/attendance/${params}`)
         const res = await request({ url: `/api/attendance/${params}`, method: "GET" })
         if (res.status) {
             setAttendance(res.data.results)
@@ -96,6 +242,7 @@ export default function Subjects() {
     async function nextPage(url) {
         const u = new URL(url)
         const params = u.search
+        setPresentPage(`/api/attendance/${params}`)
         const res = await request({ url: `/api/attendance/${params}`, method: "GET" })
         if (res.status) {
             setAttendance(res.data.results)
@@ -113,6 +260,7 @@ export default function Subjects() {
         if (filter1) params.append("section", filter1)
         if (filter2) params.append("present", filter2)
 
+        setPresentPage(`/api/attendance/?${params.toString()}`)
         const res = await request({
             url: `/api/attendance/?${params.toString()}`
         })
@@ -128,10 +276,7 @@ export default function Subjects() {
         <>
             <main className="attendance_admin">
                 <section className="nav animation_left">
-                    <button className="addNewRecordBTN" onClick={() => setShowForm(true)}>
-                        <BookText className="icon" />
-                        Add Attendance
-                    </button>
+                    <NewRecordButton onClick={() => setShowForm(true)} Icon={BookText} label={"Add Attendance"} />
                 </section>
 
                 <span className="attendanceIntro animation_left">
@@ -141,7 +286,7 @@ export default function Subjects() {
                 <div className="filterButtons animation_left">
                     <div className="sortBy">
                         <select onChange={(e) => {
-                            const v = e.target.value 
+                            const v = e.target.value
                             setOrder(v)
                             sortFilterList(v, filter1, filter2)
                         }}>
@@ -154,7 +299,7 @@ export default function Subjects() {
 
                     <div className="filterBTNBox">
                         <select onChange={(e) => {
-                            const v = e.target.value 
+                            const v = e.target.value
                             setFilter1(v)
                             sortFilterList(order, v, filter2)
                         }}>
@@ -162,7 +307,7 @@ export default function Subjects() {
                             {
                                 sections ? (
                                     sections.map(sec => {
-                                        return <option value={sec.section} className="sortOptions">{sec.section}</option>
+                                        return <option value={sec.section} className="sortOptions" key={sec.id}>{sec.section}</option>
                                     })
                                 ) : (
                                     <option value="" className="sortOptions">No options</option>
@@ -170,7 +315,7 @@ export default function Subjects() {
                             }
                         </select>
                         <select onChange={(e) => {
-                            const v = e.target.value 
+                            const v = e.target.value
                             setFilter2(v)
                             sortFilterList(order, filter1, v)
                         }}>
@@ -183,8 +328,7 @@ export default function Subjects() {
 
                 <section className="attendanceBox animation_right">
                     <div className="header">
-                        <BookText className="icon" />
-                        <p>Attendance Record</p>
+                        <HeadingLg Icon={BookText} label={"Attendance Record"} />
                     </div>
                     {
                         attendance ? (
@@ -192,15 +336,21 @@ export default function Subjects() {
                                 {
                                     attendance.map(att => {
                                         return (
-                                            <div className={`attendance ${att.attendance ? "presentBox" : "absentBox"}`}>
+                                            <div className={`attendance ${att.attendance ? "presentBox" : "absentBox"}`} key={att.id}>
                                                 <CircleUserIcon className="icon_att" />
-                                                <span>
+                                                <span className="att_span">
                                                     <p className="name">{att.student.user.first_name} {att.student.user.last_name}</p>
                                                     <p className="section"> <strong>Section: </strong> {att.student.section}</p>
                                                 </span>
                                                 <p className="date">{att.date}</p>
                                                 <p className={`status ${att.attendance ? "present" : "absent"}`}>{att.attendance ? "Present" : "Absent"}</p>
-
+                                                <span className="act_span">
+                                                    <ActionButton Icon={SquarePen} onClick={() => {
+                                                        setInstanceObj(att)
+                                                        console.log(att)
+                                                    }} />
+                                                    <ActionButton Icon={Trash} onClick={() => deleteAtt(att.id)} />
+                                                </span>
                                             </div>
                                         )
                                     })
@@ -213,19 +363,22 @@ export default function Subjects() {
 
                     <div className="pageChangingButtons">
                         {
-                            prev && <button className="changePG" onClick={() => prevPage(prev)}>{currentPage - 1}</button>
+                            prev && <ChangePageButton onClick={() => prevPage(prev)} label={currentPage - 1} />
                         }
-                        <button className="changePG" style={{ backgroundColor: "rgba(255, 255, 255, 1)" }}>{currentPage}</button>
+                        <ChangePageButton buttonStyle={"rgba(255, 255, 255, 1)"} label={currentPage} />
                         {
-                            next && <button className="changePG" onClick={() => nextPage(next)}>{currentPage + 1}</button>
+                            next && <ChangePageButton onClick={() => nextPage(next)} label={currentPage + 1} />
                         }
                     </div>
                 </section>
             </main>
             {
-                showForm && <div className={`overlay_addSec fb_sec ${isFormClosing ? "overlay_addSec_closing" : ""}`}>
-                    <AddNewSubject close={closeForm} />
+                showForm && <div className={`overlayBox ${isFormClosing ? "overlayBoxClosing" : ""}`}>
+                    <AddNewRecord close={closeForm} status={updateStatus} isDone={updateDoneStatus} setMsg={setMsg} instance={instance} reflectChange={reflectChange} />
                 </div>
+            }
+            {
+                creationStatus && <div className="statusOverlay"><Status label={popMssg ? popMssg : ""} status={isDone} /></div>
             }
         </>
     )
