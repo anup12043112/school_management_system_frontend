@@ -28,8 +28,8 @@ export function OverlayHead({Icon, label, onClick, height}) {
                 <HeadingMd Icon={Icon} label={label} />
             </div>
             <div className="rightDiv">
-                <button className="closeBTN" onClick={onClick}>
-                    <X className="closeIconStyle"/>
+                <button className="closePopUpBTN" onClick={onClick}>
+                    <X className="closePopUpBTNStyle"/>
                 </button>
             </div>
         </div>

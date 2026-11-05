@@ -14,6 +14,10 @@ export function DataProvider({ children }) {
     const [teaching_assignmentFiltered, setTeaching_assignmentFiltered] = useState("")
     const [profile, setProfile] = useState("")
     const [notice, setNotice] = useState("")
+
+    const [showConf, setShowConf] = useState(false)
+    const [isConfClosing, setIsConfClosing] = useState(false)
+    const [confLabel, setConfLabel] = useState("")
     
     async function fetchSections(){
         const res = await request({url: "/api/sections/", method: "GET"})
@@ -92,7 +96,7 @@ export function DataProvider({ children }) {
    }
 
     return (
-        <DataContext.Provider value={{ sections, fetchSections, subjects, fetchSubjects, students, fetchStudents, teachers, fetchTeachers, teaching_assignment, fetchTeachingAssignment, setTeaching_assignment, teaching_assignmentFiltered, setTeaching_assignmentFiltered, profile, fetchProfile, parents, fetchParents, notice, fetchNotice, clearData}}>
+        <DataContext.Provider value={{ sections, fetchSections, subjects, fetchSubjects, students, fetchStudents, teachers, fetchTeachers, teaching_assignment, fetchTeachingAssignment, setTeaching_assignment, teaching_assignmentFiltered, setTeaching_assignmentFiltered, profile, fetchProfile, parents, fetchParents, notice, fetchNotice, clearData, showConf, setShowConf, isConfClosing, setIsConfClosing, confLabel, setConfLabel }}>
             {children}
         </DataContext.Provider>
     )

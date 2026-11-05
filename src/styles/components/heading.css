@@ -58,20 +58,29 @@
     justify-content: right;
 }
 
-.righDiv .closeBTN {
+.closePopUpBTN {
     background-color: transparent;
     border: none;
     outline: none;
     padding: 0;
     box-shadow: none;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+}
+.closePopUpBTN:hover {
+    cursor: pointer;
+    background-color: rgb(220, 220, 220);
+}
+.closePopUpBTN:active {
+    transform: scale(0.8);
 }
 
-.righDiv .closeBTN .closeIconStyle {
+.closePopUpBTN .closePopUpBTNStyle {
     width: 1.2rem;
     height: 1.2rem;
     padding: .2rem;
-    color: rgb(0, 38, 163);
+    color: rgb(0, 0, 0);
     border-radius: 50%;
     background-color: rgba(255, 255, 255, 0.248);
-    box-shadow: 0 0 .2rem black;
+    box-shadow: 0 0 .2rem rgba(0, 0, 0, 0.334);
 }

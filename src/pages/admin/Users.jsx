@@ -1,7 +1,8 @@
 import "../../styles/admin/adminUsers.css"
 import "../../styles/animation.css"
 import { SquarePen, Trash, UserPlus, Users2, LucidePersonStanding, User2 } from "lucide-react"
-import { useState, useEffect, use } from "react"
+import { useState, useEffect, useContext } from "react"
+import { DataContext } from "../../context/DataContext"
 import { capitalize } from "../../services/utils"
 import { request } from "../../services/apiClient"
 
@@ -10,34 +11,31 @@ import { NewRecordButton, FormButton, ActionButton } from "../../components/Butt
 import { HeadingMd } from "../../components/Headings"
 import Loader from "../../components/Loader"
 import { OverlayHead } from "../../components/Headings"
+import { ConfirmationBox } from "../../components/DialogueBox"
 import { Input, Status } from "../../components/Loader"
 
 
-const ListUsers = ({ users, setMsg, status, isDone, setInst, reflectChange }) => {
-    const deleteUser = async (id) => {
-        const res = await request({ url: `/api/users/${id}/`, method: "DELETE" })
-        status()
-        if (res.data === null) {
-            isDone()
-            setMsg("User is deleted successfully")
-            reflectChange()
-        } else {
-            setMsg("Deletion unsuccessful.")
-        }
+const ListUsers = ({ users, setInst, setDeleteMode }) => {
+    const { setShowConf, setIsConfClosing, setConfLabel } = useContext(DataContext)
+
+    function confirmAction(id) {
+        setDeleteMode({isDeleting: true, id: id})
+        setShowConf(true)
+        setIsConfClosing(false)
+        setConfLabel("Are you sure you want to remove this user ?")
     }
+
     return (
         users ? (users.map(user => {
             return (
-                <>
-                    <div className="user" key={user.id}>
-                        <p className="user_name">{user.first_name} {user.last_name} ({user.username})</p>
-                        <p className={`user_role ${user.role}`}>{String(capitalize(user.role))}</p>
-                        <span className="user_actions">
-                            <ActionButton Icon={SquarePen} onClick={() => setInst(user)} />
-                            <ActionButton Icon={Trash} onClick={() => deleteUser(user.id)} />
-                        </span>
-                    </div>
-                </>
+                <div className="user" key={user.id}>
+                    <p className="user_name">{user.first_name} {user.last_name} ({user.username})</p>
+                    <p className={`user_role ${user.role}`}>{String(capitalize(user.role))}</p>
+                    <span className="user_actions">
+                        <ActionButton Icon={SquarePen} onClick={() => setInst(user)} />
+                        <ActionButton Icon={Trash} onClick={() => confirmAction(user.id)} />
+                    </span>
+                </div>
             )
         })) : (
             <h1>Loading</h1>
@@ -54,39 +52,27 @@ function FilterBTN({ label, onClick }) {
     )
 }
 
-function AddNewRecord({ close, instance, status, isDone, setMsg, reflectChange }) {
-    const [userObj, setUserObj] = useState(instance || {})
+function AddNewRecord({ addNewRecordProps }) {
+    const { setShowConf, setConfLabel, setIsConfClosing } = useContext(DataContext)
+    const { close, instance, status, setPopMsg, userObj, setUserObj } = addNewRecordProps
 
 
-    async function performAction() {
+    function confirmAction() {
         if (userObj.username && userObj.first_name && userObj.last_name && userObj.password && userObj.role) {
+            setIsConfClosing(false)
+            setShowConf(true)
             if (Object.keys(instance || {}).length === 0) {
-                const res = await request({ url: "/api/users/", method: "POST", body: userObj })
-                status()
-                if (res.status && res.data.first_name) {
-                    isDone()
-                    setMsg(`User with username [${res.data.username}] is created successfully.`)
-                    setUserObj({})
-                    reflectChange()
-                } else {
-                    status()
-                    setMsg(res.data.username[0])
-                }
+                setConfLabel(`Are you sure you want to create the user ${userObj.username} ?`)
             } else {
-                const res = await request({ url: `/api/users/${userObj.id}/`, method: "PATCH", body: userObj })
-                status()
-                if (res.data.first_name) {
-                    isDone()
-                    setMsg(`User (${userObj.first_name} ${userObj.last_name}) is updated successfully. Refresh the page to reflect the change.`)
-                } else {
-                    setMsg(`Can't update the User (${userObj.first_name} ${userObj.last_name}) right now, try again later.`)
-                }
+                setConfLabel(`Are you sure you want to update the user ${userObj.username} ?`)
             }
 
         } else {
-            setMsg("Every field is required.")
+            status()
+            setPopMsg("Every field is required.")
         }
     }
+
 
     function setValue(e) {
         setUserObj(prev => (
@@ -94,44 +80,48 @@ function AddNewRecord({ close, instance, status, isDone, setMsg, reflectChange }
         ))
     }
     return (
-        <main className="newRecordUser">
-            <div className="headUser">
-                <OverlayHead Icon={UserPlus} label={"Add User"} onClick={close} />
-            </div>
-            <form className="bodyUser">
-
-                <div className="inputSet">
-                    <Input name={"first_name"} onChange={e => setValue(e)} placeholder={"Enter First Name"} label={"First Name"} value={userObj.first_name ?? ""} />
-                    <Input name={"last_name"} onChange={e => setValue(e)} placeholder={"Enter Last Name"} label={"Last Name"} value={userObj.last_name ?? ""} />
+        <>
+            <main className="newRecordUser">
+                <div className="headUser">
+                    <OverlayHead Icon={UserPlus} label={"Add User"} onClick={close} />
                 </div>
+                <form className="bodyUser">
 
-                <div className="inputSet">
-                    <Input name={"username"} onChange={e => setValue(e)} placeholder={"Create Username"} label={"Username"} value={userObj.username ?? ""} />
-                    {
-                        Object.keys(instance || {}).length === 0 && <Input name={"password"} onChange={e => setValue(e)} placeholder={"Create Password"} label={"Password"} value={userObj.password ?? ""} />
-                    }
-                </div>
+                    <div className="inputSet">
+                        <Input name={"first_name"} onChange={e => setValue(e)} placeholder={"Enter First Name"} label={"First Name"} value={userObj.first_name ?? ""} />
+                        <Input name={"last_name"} onChange={e => setValue(e)} placeholder={"Enter Last Name"} label={"Last Name"} value={userObj.last_name ?? ""} />
+                    </div>
 
-                <div className="inputSet">
-                    <span>
-                        <p>Select Role</p>
-                        <select name="role" onChange={e => setValue(e)} required value={userObj.role ?? ""}>
-                            <option value="" disabled>Role</option>
-                            <option value="teacher">Teacher</option>
-                            <option value="parent">Parent</option>
-                            <option value="student">Student</option>
-                        </select>
-                    </span>
-                </div>
+                    <div className="inputSet">
+                        <Input name={"username"} onChange={e => setValue(e)} placeholder={"Create Username"} label={"Username"} value={userObj.username ?? ""} />
+                        {
+                            Object.keys(instance || {}).length === 0 && <Input name={"password"} onChange={e => setValue(e)} placeholder={"Create Password"} label={"Password"} value={userObj.password ?? ""} />
+                        }
+                    </div>
 
-                <FormButton onClick={performAction} label={Object.keys(instance || {}).length === 0 ? "Create User" : "Update"} />
-            </form>
-        </main>
+                    <div className="inputSet">
+                        <span>
+                            <p>Select Role</p>
+                            <select name="role" onChange={e => setValue(e)} required value={userObj.role ?? ""}>
+                                <option value="" disabled>Role</option>
+                                <option value="teacher">Teacher</option>
+                                <option value="parent">Parent</option>
+                                <option value="student">Student</option>
+                            </select>
+                        </span>
+                    </div>
+
+                    <FormButton onClick={confirmAction} label={Object.keys(instance || {}).length === 0 ? "Create User" : "Update"} />
+                </form>
+            </main>
+        </>
     )
 }
 
 
 export default function Users() {
+    const { setShowConf, setIsConfClosing, setConfLabel } = useContext(DataContext)
+
     const [users, setUsers] = useState("")
     const [usersBackup, setUsersBackup] = useState("")
 
@@ -148,9 +138,17 @@ export default function Users() {
     const [popMssg, setPopMsg] = useState("Something went wrong")
 
     const [instance, setInstance] = useState({})
+    const [userObj, setUserObj] = useState({})
+
+    const [deleteMode, setDeleteMode] = useState({
+        isDeleting: false,
+        id: ""
+    })
+
 
     function closeForm() {
         setInstance({})
+        setUserObj({})
         setIsFormClosing(true)
         setTimeout(() => {
             setShowForm(false)
@@ -166,14 +164,10 @@ export default function Users() {
             setPopMsg("Something went wrong")
         }, 2000)
     }
-    function updateDoneStatus() {
-        setIsDone(true)
-    }
-    function setMsg(msg) {
-        setPopMsg(msg)
-    }
+
     function setInstanceObj(e) {
         setInstance(e)
+        setUserObj(e)
         setShowForm(true)
     }
 
@@ -212,14 +206,69 @@ export default function Users() {
         }
     }
 
-    async function reflectChange(){
-        const res = await request({url: "/api/users/", method: "GET"})
-        if (res.status ){
+    async function reflectChange() {
+        const res = await request({ url: "/api/users/", method: "GET" })
+        if (res.status) {
             setUsers(res.data)
             setUsersBackup(res.data)
-        } 
+        }
     }
 
+    async function performAction() {
+        setShowConf(false)
+        if (userObj.username && userObj.first_name && userObj.last_name && userObj.password && userObj.role) {
+            if (Object.keys(instance || {}).length === 0) {
+                const res = await request({ url: "/api/users/", method: "POST", body: userObj })
+                updateStatus()
+                if (res.status && res.data.first_name) {
+                    setIsDone(true)
+                    setPopMsg(`User with username [${res.data.username}] is created successfully.`)
+                    setUserObj({})
+                    reflectChange()
+                } else {
+                    updateStatus()
+                    setPopMsg(res.data.username[0])
+                }
+            } else {
+                const res = await request({ url: `/api/users/${userObj.id}/`, method: "PATCH", body: userObj })
+                updateStatus()
+                if (res.data.first_name) {
+                    setIsDone(true)
+                    setPopMsg(`User (${userObj.first_name} ${userObj.last_name}) is updated successfully.`)
+                    reflectChange()
+                } else {
+                    setPopMsg(`Can't update the User (${userObj.first_name} ${userObj.last_name}) right now, try again later.`)
+                }
+            }
+
+        } else {
+            setPopMsg("Every field is required.")
+        }
+    }
+
+
+    const deleteUser = async (id) => {
+        setShowConf(false)
+        setDeleteMode({isDeleting: false, id: ""})
+        const res = await request({ url: `/api/users/${id}/`, method: "DELETE" })
+        updateStatus()
+        if (res.data === null) {
+            setIsDone(true)
+            setPopMsg("User is deleted successfully")
+            reflectChange()
+        } else {
+            setPopMsg("Deletion unsuccessful.")
+        }
+    }
+
+    const addNewRecordProps = {
+        close: closeForm,
+        status: updateStatus,
+        setPopMsg,
+        instance,
+        userObj,
+        setUserObj
+    }
     return (
         <>
             <main className="users_admin">
@@ -253,9 +302,9 @@ export default function Users() {
                             <section className="usersListBox">
                                 {
                                     searchKeyword ? (
-                                        <ListUsers users={searchResult} status={updateStatus} isDone={updateDoneStatus} setMsg={setMsg} setInst={setInstanceObj} reflectChange={reflectChange} />
+                                        <ListUsers users={searchResult} setInst={setInstanceObj} setDeleteMode={setDeleteMode} />
                                     ) : (
-                                        <ListUsers users={users} status={updateStatus} isDone={updateDoneStatus} setMsg={setMsg} setInst={setInstanceObj} reflectChange={reflectChange} />
+                                        <ListUsers users={users} setInst={setInstanceObj} setDeleteMode={setDeleteMode} />
                                     )
                                 }
                             </section>
@@ -267,12 +316,13 @@ export default function Users() {
             </main>
             {
                 showForm && <div className={`overlayBox ${isFormClosing ? "overlayBoxClosing" : ""}`}>
-                    <AddNewRecord close={closeForm} status={updateStatus} isDone={updateDoneStatus} setMsg={setMsg} instance={instance} reflectChange={reflectChange} />
+                    <AddNewRecord addNewRecordProps={addNewRecordProps} />
                 </div>
             }
             {
                 creationStatus && <div className="statusOverlay"><Status label={popMssg ? popMssg : ""} status={isDone} /></div>
             }
+            <ConfirmationBox confirm={ deleteMode.isDeleting ? () => deleteUser(deleteMode.id) : performAction}/>
         </>
     )
 }
